@@ -40,6 +40,7 @@
   .search{flex:1;display:flex;align-items:center;background:var(--glass);padding:.45rem;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
   .search input{background:transparent;border:0;color:inherit;padding:.45rem .6rem;outline:none;font-size:0.95rem}
   .btn{background:linear-gradient(90deg,var(--gold),#ffd27f);color:#08101a;padding:.5rem .9rem;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+  .btn-secondary{background:var(--glass);color:inherit;padding:.5rem .9rem;border-radius:10px;border:1px solid rgba(255,255,255,0.03);font-weight:600;cursor:pointer}
   main{display:grid;grid-template-columns:320px 1fr;gap:1rem;margin-top:1rem}
   aside{background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);padding:1rem;border-radius:12px;border:1px solid rgba(255,255,255,0.03);min-height:68vh;overflow:auto}
   .region-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.5rem}
@@ -75,6 +76,7 @@
   .stats-table{width:100%;border-collapse:collapse;margin-top:.6rem}
   .stats-table th,.stats-table td{padding:.6rem;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
   .small-muted{color:var(--muted);font-size:.9rem}
+  .export-buttons{display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap}
   @media (max-width:980px){main{grid-template-columns:1fr} .dashboard{grid-template-columns:1fr} .controls{flex-direction:column;align-items:stretch}}
 </style>
 </head>
@@ -140,14 +142,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/musa-ceesay"
+                "website": "https://gambiapoultryfarmers.org/farmers/musa-ceesay",
+                "contact": "+220 123 4567"
               },
               {
                 "name": "Fatou Jallow",
                 "gender": "Female", 
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/fatou-jallow"
+                "website": "https://gambiapoultryfarmers.org/farmers/fatou-jallow",
+                "contact": "+220 234 5678"
               }
             ]
           },
@@ -159,14 +163,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/ebrima-sanyang"
+                "website": "https://gambiapoultryfarmers.org/farmers/ebrima-sanyang",
+                "contact": "+220 345 6789"
               },
               {
                 "name": "Aminata Bojang",
                 "gender": "Female",
                 "village": "Barrow Kunda", 
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/aminata-bojang"
+                "website": "https://gambiapoultryfarmers.org/farmers/aminata-bojang",
+                "contact": "+220 456 7890"
               }
             ]
           }
@@ -183,14 +189,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/lamin-touray"
+                "website": "https://gambiapoultryfarmers.org/farmers/lamin-touray",
+                "contact": "+220 567 8901"
               },
               {
                 "name": "Isatou Camara",
                 "gender": "Female",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/isatou-camara"
+                "website": "https://gambiapoultryfarmers.org/farmers/isatou-camara",
+                "contact": "+220 678 9012"
               }
             ]
           }
@@ -212,14 +220,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/ousman-jatta"
+                "website": "https://gambiapoultryfarmers.org/farmers/ousman-jatta",
+                "contact": "+220 789 0123"
               },
               {
                 "name": "Mariama Colley",
                 "gender": "Female",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/mariama-colley"
+                "website": "https://gambiapoultryfarmers.org/farmers/mariama-colley",
+                "contact": "+220 890 1234"
               }
             ]
           },
@@ -231,14 +241,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/modou-njie"
+                "website": "https://gambiapoultryfarmers.org/farmers/modou-njie",
+                "contact": "+220 901 2345"
               },
               {
                 "name": "Hawa Bah",
                 "gender": "Female",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/hawa-bah"
+                "website": "https://gambiapoultryfarmers.org/farmers/hawa-bah",
+                "contact": "+220 012 3456"
               }
             ]
           }
@@ -260,14 +272,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/kebba-sowe"
+                "website": "https://gambiapoultryfarmers.org/farmers/kebba-sowe",
+                "contact": "+220 123 9876"
               },
               {
                 "name": "Adama Sanneh",
                 "gender": "Female",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/adama-sanneh"
+                "website": "https://gambiapoultryfarmers.org/farmers/adama-sanneh",
+                "contact": "+220 234 8765"
               }
             ]
           },
@@ -279,14 +293,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/sainey-lowe"
+                "website": "https://gambiapoultryfarmers.org/farmers/sainey-lowe",
+                "contact": "+220 345 7654"
               },
               {
                 "name": "Binta Darboe",
                 "gender": "Female",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/binta-darboe"
+                "website": "https://gambiapoultryfarmers.org/farmers/binta-darboe",
+                "contact": "+220 456 6543"
               }
             ]
           }
@@ -303,14 +319,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/alieu-sonko"
+                "website": "https://gambiapoultryfarmers.org/farmers/alieu-sonko",
+                "contact": "+220 567 5432"
               },
               {
                 "name": "Kaddy Jarju",
                 "gender": "Female",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/kaddy-jarju"
+                "website": "https://gambiapoultryfarmers.org/farmers/kaddy-jarju",
+                "contact": "+220 678 4321"
               }
             ]
           }
@@ -332,14 +350,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/pa-cham"
+                "website": "https://gambiapoultryfarmers.org/farmers/pa-cham",
+                "contact": "+220 789 3210"
               },
               {
                 "name": "Sukina Trawally",
                 "gender": "Female",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/sukina-trawally"
+                "website": "https://gambiapoultryfarmers.org/farmers/sukina-trawally",
+                "contact": "+220 890 2109"
               }
             ]
           }
@@ -356,14 +376,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/yankuba-sillah"
+                "website": "https://gambiapoultryfarmers.org/farmers/yankuba-sillah",
+                "contact": "+220 901 1098"
               },
               {
                 "name": "Ramatoulie Jobe",
                 "gender": "Female",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/ramatoulie-jobe"
+                "website": "https://gambiapoultryfarmers.org/farmers/ramatoulie-jobe",
+                "contact": "+220 012 0987"
               }
             ]
           }
@@ -385,14 +407,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/samba-sarr"
+                "website": "https://gambiapoultryfarmers.org/farmers/samba-sarr",
+                "contact": "+220 123 5555"
               },
               {
                 "name": "Fatoumata Tamba",
                 "gender": "Female",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/fatoumata-tamba"
+                "website": "https://gambiapoultryfarmers.org/farmers/fatoumata-tamba",
+                "contact": "+220 234 6666"
               }
             ]
           }
@@ -409,14 +433,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/bubacarr-jawo"
+                "website": "https://gambiapoultryfarmers.org/farmers/bubacarr-jawo",
+                "contact": "+220 345 7777"
               },
               {
                 "name": "Aja Mballow",
                 "gender": "Female",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/aja-mballow"
+                "website": "https://gambiapoultryfarmers.org/farmers/aja-mballow",
+                "contact": "+220 456 8888"
               }
             ]
           }
@@ -438,14 +464,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/lamin-kante"
+                "website": "https://gambiapoultryfarmers.org/farmers/lamin-kante",
+                "contact": "+220 567 9999"
               },
               {
                 "name": "Maimuna Nyassi",
                 "gender": "Female",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/maimuna-nyassi"
+                "website": "https://gambiapoultryfarmers.org/farmers/maimuna-nyassi",
+                "contact": "+220 678 0000"
               }
             ]
           }
@@ -462,14 +490,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/ebrima-camara"
+                "website": "https://gambiapoultryfarmers.org/farmers/ebrima-camara",
+                "contact": "+220 789 1111"
               },
               {
                 "name": "Ndey Gomez",
                 "gender": "Female",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/ndey-gomez"
+                "website": "https://gambiapoultryfarmers.org/farmers/ndey-gomez",
+                "contact": "+220 890 2222"
               }
             ]
           }
@@ -491,14 +521,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/ousman-fofana"
+                "website": "https://gambiapoultryfarmers.org/farmers/ousman-fofana",
+                "contact": "+220 901 3333"
               },
               {
                 "name": "Kumba Senghore",
                 "gender": "Female",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/kumba-senghore"
+                "website": "https://gambiapoultryfarmers.org/farmers/kumba-senghore",
+                "contact": "+220 012 4444"
               }
             ]
           }
@@ -515,14 +547,16 @@ const fullData = [
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/momodou-manneh"
+                "website": "https://gambiapoultryfarmers.org/farmers/momodou-manneh",
+                "contact": "+220 123 7777"
               },
               {
                 "name": "Saffie Boima",
                 "gender": "Female",
                 "village": "Barrow Kunda",
                 "capacity": 500,
-                "website": "https://gambiapoultryfarmers.org/farmers/saffie-boima"
+                "website": "https://gambiapoultryfarmers.org/farmers/saffie-boima",
+                "contact": "+220 234 8888"
               }
             ]
           }
@@ -572,6 +606,57 @@ function calculateStatistics() {
   };
 }
 
+// Export to CSV function
+function exportToCSV() {
+  const stats = calculateStatistics();
+  
+  let csvContent = "Gambia Poultry Farmers Association - Statistics Report\n\n";
+  
+  // National Statistics
+  csvContent += "NATIONAL STATISTICS\n";
+  csvContent += "Total Regions," + fullData.length + "\n";
+  csvContent += "Total Districts," + stats.totalDistricts + "\n";
+  csvContent += "Total Wards," + stats.totalWards + "\n";
+  csvContent += "Total Farmers," + stats.totalFarmers + "\n";
+  csvContent += "Monthly Production," + stats.totalProduction + " eggs\n";
+  csvContent += "Annual Production," + (stats.totalProduction * 12) + " eggs\n\n";
+  
+  // Regional Breakdown
+  csvContent += "REGIONAL BREAKDOWN\n";
+  csvContent += "Region,Districts,Wards,Farmers,Monthly Production,Annual Production\n";
+  
+  Object.entries(stats.regionStats).forEach(([region, data]) => {
+    csvContent += `"${region}",${data.districts},${data.wards},${data.farmers},${data.production} eggs,${data.production * 12} eggs\n`;
+  });
+  
+  csvContent += `"NATIONAL TOTAL",${stats.totalDistricts},${stats.totalWards},${stats.totalFarmers},${stats.totalProduction} eggs,${stats.totalProduction * 12} eggs\n\n`;
+  
+  // Farmer Details
+  csvContent += "FARMER DETAILS\n";
+  csvContent += "Region,District,Ward,Name,Gender,Village,Capacity (eggs/month),Contact,Website\n";
+  
+  fullData.forEach(region => {
+    region.districts.forEach(district => {
+      district.wards.forEach(ward => {
+        ward.farmers.forEach(farmer => {
+          csvContent += `"${region.region}","${district.district}","${ward.ward}","${farmer.name}","${farmer.gender}","${farmer.village}",${farmer.capacity},"${farmer.contact || 'Not provided'}","${farmer.website}"\n`;
+        });
+      });
+    });
+  });
+  
+  // Create and download CSV file
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  link.setAttribute('href', url);
+  link.setAttribute('download', 'gambia_poultry_farmers_statistics.csv');
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
   const regionList = document.getElementById('regionList');
@@ -607,6 +692,9 @@ document.addEventListener('DOMContentLoaded', function() {
       li.addEventListener('click', () => {
         showRegion(region.region);
         currentRegion = region.region;
+        // Update filters to show only selected region
+        updateDistrictFilter(region.region);
+        updateWardFilter(region.region, '');
       });
       regionList.appendChild(li);
       
@@ -615,22 +703,6 @@ document.addEventListener('DOMContentLoaded', function() {
       option.value = region.region;
       option.textContent = region.region;
       regionFilter.appendChild(option);
-      
-      // Add districts to district filter
-      region.districts.forEach(district => {
-        const districtOption = document.createElement('option');
-        districtOption.value = district.district;
-        districtOption.textContent = district.district;
-        districtFilter.appendChild(districtOption);
-        
-        // Add wards to ward filter
-        district.wards.forEach(ward => {
-          const wardOption = document.createElement('option');
-          wardOption.value = ward.ward;
-          wardOption.textContent = ward.ward;
-          wardFilter.appendChild(wardOption);
-        });
-      });
     });
     
     // Show first region by default
@@ -638,10 +710,60 @@ document.addEventListener('DOMContentLoaded', function() {
       showRegion(fullData[0].region);
       currentRegion = fullData[0].region;
       regionList.children[0].classList.add('active');
+      updateDistrictFilter(fullData[0].region);
     }
   }
   
-  // Show region details
+  // Update district filter based on selected region
+  function updateDistrictFilter(regionName) {
+    districtFilter.innerHTML = '<option value="">All Districts</option>';
+    wardFilter.innerHTML = '<option value="">All Wards</option>';
+    
+    if (!regionName) {
+      // Show all districts if no region selected
+      fullData.forEach(region => {
+        region.districts.forEach(district => {
+          const districtOption = document.createElement('option');
+          districtOption.value = district.district;
+          districtOption.textContent = district.district;
+          districtFilter.appendChild(districtOption);
+        });
+      });
+      return;
+    }
+    
+    const region = fullData.find(r => r.region === regionName);
+    if (region) {
+      region.districts.forEach(district => {
+        const districtOption = document.createElement('option');
+        districtOption.value = district.district;
+        districtOption.textContent = district.district;
+        districtFilter.appendChild(districtOption);
+      });
+    }
+  }
+  
+  // Update ward filter based on selected region and district
+  function updateWardFilter(regionName, districtName) {
+    wardFilter.innerHTML = '<option value="">All Wards</option>';
+    
+    if (!regionName || !districtName) return;
+    
+    const region = fullData.find(r => r.region === regionName);
+    if (region) {
+      const district = region.districts.find(d => d.district === districtName);
+      if (district) {
+        district.wards.forEach(ward => {
+          const wardOption = document.createElement('option');
+          wardOption.value = ward.ward;
+          wardOption.textContent = ward.ward;
+          wardFilter.appendChild(wardOption);
+        });
+      }
+    }
+  }
+  
+  // Show region details - ONLY shows selected region
   function showRegion(regionName) {
     const region = fullData.find(r => r.region === regionName);
     if (!region) return;
@@ -704,6 +826,7 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     `;
     
+    // ONLY show districts and wards from the selected region
     region.districts.forEach(district => {
       const districtEl = document.createElement('div');
       districtEl.className = 'district';
@@ -731,6 +854,7 @@ document.addEventListener('DOMContentLoaded', function() {
               <b>${farmer.name}</b>
               <div class="tmeta">Gender: ${farmer.gender} | Village: ${farmer.village}</div>
               <div class="tmeta">Capacity: ${farmer.capacity} eggs per month</div>
+              <div class="tmeta">Contact: ${farmer.contact || 'Not provided'}</div>
               <div class="tmeta"><a href="${farmer.website}" target="_blank" style="color:var(--gold)">View Profile</a></div>
             </div>
           `;
@@ -793,6 +917,11 @@ document.addEventListener('DOMContentLoaded', function() {
               <h3>${stats.totalProduction.toLocaleString()}/month</h3>
             </div>
           </div>
+          
+          <div class="export-buttons">
+            <button class="btn" onclick="exportToCSV()">📊 Download CSV Report</button>
+            <button class="btn-secondary" onclick="window.print()">🖨️ Print Statistics</button>
+          </div>
         </div>
         
         <div class="dash-card">
@@ -826,6 +955,10 @@ document.addEventListener('DOMContentLoaded', function() {
               </tr>
             </tbody>
           </table>
+          
+          <div class="export-buttons">
+            <button class="btn-secondary" onclick="exportToCSV()">📥 Export Full Data to CSV</button>
+          </div>
         </div>
       </div>
     `;
@@ -869,6 +1002,7 @@ document.addEventListener('DOMContentLoaded', function() {
           item.classList.add('active');
           showRegion(regionValue);
           currentRegion = regionValue;
+          updateDistrictFilter(regionValue);
         }
       });
     } else if (districtValue || wardValue || searchValue) {
@@ -881,12 +1015,22 @@ document.addEventListener('DOMContentLoaded', function() {
         showRegion(fullData[0].region);
         currentRegion = fullData[0].region;
         regionList.children[0].classList.add('active');
+        updateDistrictFilter(fullData[0].region);
       }
     }
   }
   
-  regionFilter.addEventListener('change', applyFilters);
-  districtFilter.addEventListener('change', applyFilters);
+  regionFilter.addEventListener('change', function() {
+    updateDistrictFilter(this.value);
+    applyFilters();
+  });
+  
+  districtFilter.addEventListener('change', function() {
+    const regionValue = regionFilter.value;
+    updateWardFilter(regionValue, this.value);
+    applyFilters();
+  });
+  
   wardFilter.addEventListener('change', applyFilters);
   searchInput.addEventListener('input', applyFilters);
   
@@ -895,6 +1039,7 @@ document.addEventListener('DOMContentLoaded', function() {
     districtFilter.value = '';
     wardFilter.value = '';
     searchInput.value = '';
+    updateDistrictFilter('');
     applyFilters();
   });
   
