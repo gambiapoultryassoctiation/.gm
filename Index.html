@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Gambia Poultry Farmers Association</title>
+<meta name="description" content="Gambia Poultry Farmers Association: Regions, Districts, Wards, Poultry Farmers, Nationwide dashboard & statistics" />
+<style>
+  :root{
+    --bg:#0f1724;
+    --card:#0b1220;
+    --muted:#9aa4b2;
+    --gold:#d4af37;
+    --silver:#c0c6cc;
+    --diamond:#bfe9ff;
+    --glass:rgba(255,255,255,0.04);
+    --radius:12px;
+    --maxw:1400px;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1000px 360px at 8% 8%, rgba(212,175,55,0.06), transparent),
+      radial-gradient(900px 280px at 92% 88%, rgba(191,233,255,0.03), transparent),
+      var(--bg);
+    color:#e6eef6;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding:2rem 1rem;
+  }
+  .layout{max-width:var(--maxw);margin:0 auto;}
+  header{display:flex;align-items:center;gap:1rem;justify-content:space-between;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:1rem;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:.6rem 1rem;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
+  .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--gold),#ffd27f 40%,var(--diamond));display:grid;place-items:center;color:#08101a;font-weight:800;font-size:20px}
+  h1{margin:0;font-size:1.25rem;line-height:1;color:var(--gold)}
+  .lead{color:var(--muted);font-size:.95rem}
+  .controls{display:flex;gap:.6rem;margin-top:.75rem;align-items:center;flex-wrap:wrap}
+  .search{flex:1;display:flex;align-items:center;background:var(--glass);padding:.45rem;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+  .search input{background:transparent;border:0;color:inherit;padding:.45rem .6rem;outline:none;font-size:0.95rem}
+  .btn{background:linear-gradient(90deg,var(--gold),#ffd27f);color:#08101a;padding:.5rem .9rem;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+  main{display:grid;grid-template-columns:320px 1fr;gap:1rem;margin-top:1rem}
+  aside{background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);padding:1rem;border-radius:12px;border:1px solid rgba(255,255,255,0.03);min-height:68vh;overflow:auto}
+  .region-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.5rem}
+  .region-item{padding:.6rem;border-radius:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;border:1px solid transparent}
+  .region-item:hover{background:rgba(255,255,255,0.02)}
+  .region-item.active{background:linear-gradient(90deg,rgba(212,175,55,0.06),rgba(191,233,255,0.02));border-color:rgba(212,175,55,0.08)}
+  .content{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:1rem;border-radius:12px;border:1px solid rgba(255,255,255,0.03);min-height:68vh;overflow:auto}
+  .district{background:rgba(255,255,255,0.01);padding:.8rem;border-radius:12px;margin-bottom:1rem;border:1px solid rgba(255,255,255,0.02)}
+  .wards-grid{display:flex;flex-direction:column;gap:.6rem;margin-top:.6rem}
+  .ward{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));padding:.6rem;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
+  .ward h4{margin:0 0 .45rem 0;font-size:0.95rem}
+  .section-row{display:flex;gap:.6rem;flex-wrap:wrap}
+  .section{flex:1;min-width:220px;background:rgba(255,255,255,0.01);padding:.5rem;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
+  .farmer{display:flex;gap:.6rem;align-items:center;padding:.45rem;border-radius:10px;margin-bottom:.45rem;background:linear-gradient(90deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.02)}
+  .avatar-wrap{width:56px;height:56px;border-radius:8px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(180deg,var(--silver),rgba(255,255,255,0.06))}
+  .avatar{display:block;width:48px;height:48px;border-radius:8px;object-fit:cover}
+  .initials{font-weight:700;color:#08101a}
+  .tinfo{flex:1}
+  .tinfo b{display:block}
+  .tmeta{font-size:.85rem;color:var(--muted);margin-top:.25rem}
+  footer{margin-top:1rem;color:var(--muted);font-size:.9rem;text-align:center}
+  select{background:var(--glass);border:1px solid rgba(255,255,255,0.03);color:inherit;padding:.5rem;border-radius:10px}
+  .dashboard{display:grid;grid-template-columns:1fr 320px;gap:1rem;margin-bottom:1rem}
+  .dash-card{background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);padding:1rem;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+  .stat-row{display:flex;gap:.6rem;flex-wrap:wrap}
+  .stat{flex:1;min-width:160px;background:rgba(255,255,255,0.02);padding:.6rem;border-radius:10px;text-align:center}
+  .stat h3{margin:0;color:var(--gold)}
+  .region-summary{display:flex;flex-direction:column;gap:.4rem;margin-top:.6rem}
+  .region-line{display:flex;justify-content:space-between;align-items:center;padding:.4rem;border-radius:8px;background:rgba(255,255,255,0.01)}
+  .tabs{display:flex;gap:.6rem;margin-bottom:.6rem}
+  .tab-btn{flex:1;padding:.5rem;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;cursor:pointer}
+  .tab-btn.active{background:linear-gradient(90deg,var(--gold),#ffd27f);color:#08101a;font-weight:700}
+  .stats-table{width:100%;border-collapse:collapse;margin-top:.6rem}
+  .stats-table th,.stats-table td{padding:.6rem;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
+  .small-muted{color:var(--muted);font-size:.9rem}
+  @media (max-width:980px){main{grid-template-columns:1fr} .dashboard{grid-template-columns:1fr} .controls{flex-direction:column;align-items:stretch}}
+</style>
+</head>
+<body>
+  <div class="layout">
+    <header>
+      <div class="brand">
+        <div class="logo">GM</div>
+        <div>
+          <h1>Gambia Poultry Farmers Association</h1>
+          <div class="lead">Regions → Districts → Wards → Poultry Farmers — Nationwide dashboard & statistics</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:.6rem;align-items:center">
+        <button class="btn" id="viewStatsTop">View Statistics</button>
+        <button class="btn">Admin</button>
+      </div>
+    </header>
+
+    <div class="controls">
+      <div class="search"><svg width="18" height="18" viewBox="0 0 24 24" style="opacity:.85;margin-right:.4rem"><path d="M21 21l-4.35-4.35" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11.5" cy="11.5" r="5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><input id="searchInput" placeholder="Search farmers, farms, districts, regions" /></div>
+      <select id="regionFilter"><option value="">All Regions</option></select>
+      <select id="districtFilter"><option value="">All Districts</option></select>
+      <select id="wardFilter"><option value="">All Wards</option></select>
+      <button class="btn" id="clearBtn">Clear</button>
+    </div>
+
+    <main>
+      <aside>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem">
+          <h4 style="color:var(--gold);margin:0">Regions</h4>
+          <div class="small-muted">Toggle</div>
+        </div>
+        <div class="tabs" style="margin-bottom:.6rem">
+          <button class="tab-btn active" id="tabRegions">Regions</button>
+          <button class="tab-btn" id="tabStats">Statistics</button>
+        </div>
+        <ul class="region-list" id="regionList"></ul>
+      </aside>
+
+      <section class="content" id="contentArea">
+        <!-- Dashboard (top) + Region list injected here -->
+      </section>
+    </main>
+
+    <footer>Gambia Poultry Farmers Association — Data maintained for nationwide poultry farming development.</footer>
+  </div>
+
+<script>
+// Updated data structure with wards instead of branches
+const fullData = [
+  {
+    "region": "Banjul",
+    "districts": [
+      {
+        "district": "Banjul Central",
+        "wards": [
+          {
+            "ward": "Banjul Market Area Ward",
+            "farmers": [
+              {
+                "name": "Musa Ceesay",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/musa-ceesay"
+              },
+              {
+                "name": "Ebrima Jallow",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/ebrima-jallow"
+              },
+              {
+                "name": "Njie Bojang",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/njie-bojang"
+              },
+              {
+                "name": "Gambetta Touray",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/gambetta-touray"
+              }
+            ]
+          },
+          {
+            "ward": "Half-Die Ward",
+            "farmers": [
+              {
+                "name": "Kebba Jatta",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/kebba-jatta"
+              },
+              {
+                "name": "Sanyang Faal",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/sanyang-faal"
+              },
+              {
+                "name": "Sainey Jammeh",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/sainey-jammeh"
+              },
+              {
+                "name": "Aria Cham",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/aria-cham"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "district": "Banjul North",
+        "wards": [
+          {
+            "ward": "New Town Ward",
+            "farmers": [
+              {
+                "name": "Camara Trawally",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/camara-trawally"
+              },
+              {
+                "name": "Modou Sillah",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/modou-sillah"
+              },
+              {
+                "name": "Sanyang Jobe",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/sanyang-jobe"
+              }
+            ]
+          },
+          {
+            "ward": "Soldier Town Ward",
+            "farmers": [
+              {
+                "name": "Jallow Mballow",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/jallow-mballow"
+              },
+              {
+                "name": "Njie Nyassi",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/njie-nyassi"
+              },
+              {
+                "name": "Lamin Camara",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/lamin-camara"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "region": "Kanifing Municipality",
+    "districts": [
+      {
+        "district": "Kanifing District",
+        "wards": [
+          {
+            "ward": "Serekunda Ward",
+            "farmers": [
+              {
+                "name": "Papa Cham",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/papa-cham"
+              },
+              {
+                "name": "Saidy Colley",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/saidy-colley"
+              },
+              {
+                "name": "Pa Bah",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/pa-bah"
+              }
+            ]
+          },
+          {
+            "ward": "Bakau Ward",
+            "farmers": [
+              {
+                "name": "Fafa Sonko",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/fafa-sonko"
+              },
+              {
+                "name": "Njie Jarju",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/njie-jarju"
+              },
+              {
+                "name": "Faal Njie",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/faal-njie"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "region": "West Coast Region (Brikama)",
+    "districts": [
+      {
+        "district": "Kombo South",
+        "wards": [
+          {
+            "ward": "Sanyang Ward",
+            "farmers": [
+              {
+                "name": "Said Kante",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/said-kante"
+              },
+              {
+                "name": "Yaw Sowe",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/yaw-sowe"
+              },
+              {
+                "name": "Faal Darboe",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/faal-darboe"
+              }
+            ]
+          },
+          {
+            "ward": "Tanji Ward",
+            "farmers": [
+              {
+                "name": "Saidy Boima",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/saidy-boima"
+              },
+              {
+                "name": "Jobe Kinteh",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/jobe-kinteh"
+              },
+              {
+                "name": "Ousman Manneh",
+                "village": "Barrow Kunda",
+                "capacity": "500 eggs per month",
+                "website": "https://gambiapoultryfarmers.org/farmers/ousman-manneh"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+];
+
+// Calculate statistics
+function calculateStatistics() {
+  let totalFarmers = 0;
+  let totalProduction = 0;
+  const regionStats = {};
+  
+  fullData.forEach(region => {
+    let regionFarmers = 0;
+    let regionProduction = 0;
+    
+    region.districts.forEach(district => {
+      district.wards.forEach(ward => {
+        ward.farmers.forEach(farmer => {
+          regionFarmers++;
+          totalFarmers++;
+          // Extract number from capacity string and calculate monthly production
+          const production = parseInt(farmer.capacity) || 500;
+          regionProduction += production;
+          totalProduction += production;
+        });
+      });
+    });
+    
+    regionStats[region.region] = {
+      farmers: regionFarmers,
+      production: regionProduction
+    };
+  });
+  
+  return {
+    totalFarmers,
+    totalProduction,
+    regionStats
+  };
+}
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+  const regionList = document.getElementById('regionList');
+  const contentArea = document.getElementById('contentArea');
+  const regionFilter = document.getElementById('regionFilter');
+  const districtFilter = document.getElementById('districtFilter');
+  const wardFilter = document.getElementById('wardFilter');
+  const searchInput = document.getElementById('searchInput');
+  const clearBtn = document.getElementById('clearBtn');
+  const tabRegions = document.getElementById('tabRegions');
+  const tabStats = document.getElementById('tabStats');
+  const viewStatsTop = document.getElementById('viewStatsTop');
+  
+  let currentView = 'regions';
+  
+  // Populate region list and filters
+  function initializeRegions() {
+    regionList.innerHTML = '';
+    regionFilter.innerHTML = '<option value="">All Regions</option>';
+    districtFilter.innerHTML = '<option value="">All Districts</option>';
+    wardFilter.innerHTML = '<option value="">All Wards</option>';
+    
+    fullData.forEach(region => {
+      // Add to region list
+      const li = document.createElement('li');
+      li.className = 'region-item';
+      li.innerHTML = `
+        <span>${region.region}</span>
+        <span class="small-muted">${region.districts.length} districts</span>
+      `;
+      li.addEventListener('click', () => showRegion(region.region));
+      regionList.appendChild(li);
+      
+      // Add to region filter
+      const option = document.createElement('option');
+      option.value = region.region;
+      option.textContent = region.region;
+      regionFilter.appendChild(option);
+      
+      // Add districts to district filter
+      region.districts.forEach(district => {
+        const districtOption = document.createElement('option');
+        districtOption.value = district.district;
+        districtOption.textContent = district.district;
+        districtFilter.appendChild(districtOption);
+        
+        // Add wards to ward filter
+        district.wards.forEach(ward => {
+          const wardOption = document.createElement('option');
+          wardOption.value = ward.ward;
+          wardOption.textContent = ward.ward;
+          wardFilter.appendChild(wardOption);
+        });
+      });
+    });
+    
+    // Show first region by default
+    if (fullData.length > 0) {
+      showRegion(fullData[0].region);
+      regionList.children[0].classList.add('active');
+    }
+  }
+  
+  // Show region details
+  function showRegion(regionName) {
+    const region = fullData.find(r => r.region === regionName);
+    if (!region) return;
+    
+    // Update active region in list
+    Array.from(regionList.children).forEach(item => {
+      item.classList.remove('active');
+      if (item.textContent.includes(regionName)) {
+        item.classList.add('active');
+      }
+    });
+    
+    const stats = calculateStatistics();
+    
+    contentArea.innerHTML = `
+      <div class="dashboard">
+        <div class="dash-card">
+          <h3 style="margin-top:0;color:var(--gold)">${regionName} Region Overview</h3>
+          <div class="stat-row">
+            <div class="stat">
+              <div class="small-muted">Total Districts</div>
+              <h3>${region.districts.length}</h3>
+            </div>
+            <div class="stat">
+              <div class="small-muted">Total Wards</div>
+              <h3>${region.districts.reduce((acc, district) => acc + district.wards.length, 0)}</h3>
+            </div>
+            <div class="stat">
+              <div class="small-muted">Total Farmers</div>
+              <h3>${stats.regionStats[regionName].farmers}</h3>
+            </div>
+            <div class="stat">
+              <div class="small-muted">Monthly Production</div>
+              <h3>${stats.regionStats[regionName].production.toLocaleString()} eggs</h3>
+            </div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <h4 style="color:var(--gold);margin-top:0">National Statistics</h4>
+          <div class="region-summary">
+            <div class="region-line">
+              <span>Total Farmers:</span>
+              <span>${stats.totalFarmers}</span>
+            </div>
+            <div class="region-line">
+              <span>Monthly Production:</span>
+              <span>${stats.totalProduction.toLocaleString()} eggs</span>
+            </div>
+            <div class="region-line">
+              <span>Annual Production:</span>
+              <span>${(stats.totalProduction * 12).toLocaleString()} eggs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    region.districts.forEach(district => {
+      const districtEl = document.createElement('div');
+      districtEl.className = 'district';
+      districtEl.innerHTML = `<h3 style="margin-top:0;color:var(--gold)">${district.district}</h3>`;
+      
+      const wardsGrid = document.createElement('div');
+      wardsGrid.className = 'wards-grid';
+      
+      district.wards.forEach(ward => {
+        const wardEl = document.createElement('div');
+        wardEl.className = 'ward';
+        wardEl.innerHTML = `<h4>${ward.ward}</h4>`;
+        
+        const farmersList = document.createElement('div');
+        farmersList.className = 'section-row';
+        
+        ward.farmers.forEach(farmer => {
+          const farmerEl = document.createElement('div');
+          farmerEl.className = 'farmer';
+          farmerEl.innerHTML = `
+            <div class="avatar-wrap">
+              <div class="initials">${farmer.name.split(' ').map(n => n[0]).join('')}</div>
+            </div>
+            <div class="tinfo">
+              <b>${farmer.name}</b>
+              <div class="tmeta">Village: ${farmer.village}</div>
+              <div class="tmeta">Capacity: ${farmer.capacity}</div>
+              <div class="tmeta"><a href="${farmer.website}" target="_blank" style="color:var(--gold)">View Profile</a></div>
+            </div>
+          `;
+          farmersList.appendChild(farmerEl);
+        });
+        
+        wardEl.appendChild(farmersList);
+        wardsGrid.appendChild(wardEl);
+      });
+      
+      districtEl.appendChild(wardsGrid);
+      contentArea.appendChild(districtEl);
+    });
+    
+    currentView = 'regions';
+  }
+  
+  // Show statistics view
+  function showStatistics() {
+    const stats = calculateStatistics();
+    
+    contentArea.innerHTML = `
+      <div class="dashboard">
+        <div class="dash-card">
+          <h3 style="margin-top:0;color:var(--gold)">National Poultry Farming Statistics</h3>
+          <div class="stat-row">
+            <div class="stat">
+              <div class="small-muted">Total Regions</div>
+              <h3>${fullData.length}</h3>
+            </div>
+            <div class="stat">
+              <div class="small-muted">Total Districts</div>
+              <h3>${fullData.reduce((acc, region) => acc + region.districts.length, 0)}</h3>
+            </div>
+            <div class="stat">
+              <div class="small-muted">Total Wards</div>
+              <h3>${fullData.reduce((acc, region) => acc + region.districts.reduce((acc2, district) => acc2 + district.wards.length, 0), 0)}</h3>
+            </div>
+            <div class="stat">
+              <div class="small-muted">Total Farmers</div>
+              <h3>${stats.totalFarmers}</h3>
+            </div>
+          </div>
+          
+          <div class="stat-row" style="margin-top:1rem">
+            <div class="stat">
+              <div class="small-muted">Monthly Egg Production</div>
+              <h3>${stats.totalProduction.toLocaleString()}</h3>
+            </div>
+            <div class="stat">
+              <div class="small-muted">Annual Egg Production</div>
+              <h3>${(stats.totalProduction * 12).toLocaleString()}</h3>
+            </div>
+            <div class="stat">
+              <div class="small-muted">Average per Farmer</div>
+              <h3>500</h3>
+            </div>
+            <div class="stat">
+              <div class="small-muted">Total Capacity</div>
+              <h3>${stats.totalProduction.toLocaleString()}/month</h3>
+            </div>
+          </div>
+        </div>
+        
+        <div class="dash-card">
+          <h4 style="color:var(--gold);margin-top:0">Regional Breakdown</h4>
+          <table class="stats-table">
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>Farmers</th>
+                <th>Monthly Production</th>
+                <th>Annual Production</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${Object.entries(stats.regionStats).map(([region, data]) => `
+                <tr>
+                  <td>${region}</td>
+                  <td>${data.farmers}</td>
+                  <td>${data.production.toLocaleString()} eggs</td>
+                  <td>${(data.production * 12).toLocaleString()} eggs</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+    
+    currentView = 'stats';
+  }
+  
+  // Tab handlers
+  tabRegions.addEventListener('click', () => {
+    tabRegions.classList.add('active');
+    tabStats.classList.remove('active');
+    if (fullData.length > 0) {
+      showRegion(fullData[0].region);
+    }
+  });
+  
+  tabStats.addEventListener('click', () => {
+    tabStats.classList.add('active');
+    tabRegions.classList.remove('active');
+    showStatistics();
+  });
+  
+  viewStatsTop.addEventListener('click', showStatistics);
+  
+  // Filter functionality
+  function applyFilters() {
+    const regionValue = regionFilter.value;
+    const districtValue = districtFilter.value;
+    const wardValue = wardFilter.value;
+    const searchValue = searchInput.value.toLowerCase();
+    
+    // This is a simplified filter implementation
+    // In a real application, you would want more sophisticated filtering
+    console.log('Filters applied:', { regionValue, districtValue, wardValue, searchValue });
+  }
+  
+  regionFilter.addEventListener('change', applyFilters);
+  districtFilter.addEventListener('change', applyFilters);
+  wardFilter.addEventListener('change', applyFilters);
+  searchInput.addEventListener('input', applyFilters);
+  
+  clearBtn.addEventListener('click', () => {
+    regionFilter.value = '';
+    districtFilter.value = '';
+    wardFilter.value = '';
+    searchInput.value = '';
+    applyFilters();
+  });
+  
+  // Initialize the application
+  initializeRegions();
+});
+</script>
+</body>
+</html>
