@@ -124,7 +124,7 @@
   </div>
 
 <script>
-// Updated data structure with wards instead of branches
+// Complete data structure for all regions with 2 farmers per ward (1 male, 1 female)
 const fullData = [
   {
     "region": "Banjul",
@@ -137,27 +137,17 @@ const fullData = [
             "farmers": [
               {
                 "name": "Musa Ceesay",
+                "gender": "Male",
                 "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
+                "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/musa-ceesay"
               },
               {
-                "name": "Ebrima Jallow",
+                "name": "Fatou Jallow",
+                "gender": "Female", 
                 "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/ebrima-jallow"
-              },
-              {
-                "name": "Njie Bojang",
-                "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/njie-bojang"
-              },
-              {
-                "name": "Gambetta Touray",
-                "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/gambetta-touray"
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/fatou-jallow"
               }
             ]
           },
@@ -165,79 +155,42 @@ const fullData = [
             "ward": "Half-Die Ward",
             "farmers": [
               {
-                "name": "Kebba Jatta",
+                "name": "Ebrima Sanyang",
+                "gender": "Male",
                 "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/kebba-jatta"
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/ebrima-sanyang"
               },
               {
-                "name": "Sanyang Faal",
-                "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/sanyang-faal"
-              },
-              {
-                "name": "Sainey Jammeh",
-                "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/sainey-jammeh"
-              },
-              {
-                "name": "Aria Cham",
-                "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/aria-cham"
+                "name": "Aminata Bojang",
+                "gender": "Female",
+                "village": "Barrow Kunda", 
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/aminata-bojang"
               }
             ]
           }
         ]
       },
       {
-        "district": "Banjul North",
+        "district": "Banjul North", 
         "wards": [
           {
             "ward": "New Town Ward",
             "farmers": [
               {
-                "name": "Camara Trawally",
+                "name": "Lamin Touray",
+                "gender": "Male",
                 "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/camara-trawally"
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/lamin-touray"
               },
               {
-                "name": "Modou Sillah",
+                "name": "Isatou Camara",
+                "gender": "Female",
                 "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/modou-sillah"
-              },
-              {
-                "name": "Sanyang Jobe",
-                "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/sanyang-jobe"
-              }
-            ]
-          },
-          {
-            "ward": "Soldier Town Ward",
-            "farmers": [
-              {
-                "name": "Jallow Mballow",
-                "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/jallow-mballow"
-              },
-              {
-                "name": "Njie Nyassi",
-                "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/njie-nyassi"
-              },
-              {
-                "name": "Lamin Camara",
-                "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/lamin-camara"
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/isatou-camara"
               }
             ]
           }
@@ -255,22 +208,18 @@ const fullData = [
             "ward": "Serekunda Ward",
             "farmers": [
               {
-                "name": "Papa Cham",
+                "name": "Ousman Jatta",
+                "gender": "Male",
                 "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/papa-cham"
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/ousman-jatta"
               },
               {
-                "name": "Saidy Colley",
+                "name": "Mariama Colley",
+                "gender": "Female",
                 "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/saidy-colley"
-              },
-              {
-                "name": "Pa Bah",
-                "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/pa-bah"
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/mariama-colley"
               }
             ]
           },
@@ -278,22 +227,18 @@ const fullData = [
             "ward": "Bakau Ward",
             "farmers": [
               {
-                "name": "Fafa Sonko",
+                "name": "Modou Njie",
+                "gender": "Male",
                 "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/fafa-sonko"
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/modou-njie"
               },
               {
-                "name": "Njie Jarju",
+                "name": "Hawa Bah",
+                "gender": "Female",
                 "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/njie-jarju"
-              },
-              {
-                "name": "Faal Njie",
-                "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/faal-njie"
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/hawa-bah"
               }
             ]
           }
@@ -311,22 +256,18 @@ const fullData = [
             "ward": "Sanyang Ward",
             "farmers": [
               {
-                "name": "Said Kante",
+                "name": "Kebba Sowe",
+                "gender": "Male",
                 "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/said-kante"
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/kebba-sowe"
               },
               {
-                "name": "Yaw Sowe",
+                "name": "Adama Sanneh",
+                "gender": "Female",
                 "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/yaw-sowe"
-              },
-              {
-                "name": "Faal Darboe",
-                "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/faal-darboe"
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/adama-sanneh"
               }
             ]
           },
@@ -334,22 +275,254 @@ const fullData = [
             "ward": "Tanji Ward",
             "farmers": [
               {
-                "name": "Saidy Boima",
+                "name": "Sainey Lowe",
+                "gender": "Male",
                 "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/saidy-boima"
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/sainey-lowe"
               },
               {
-                "name": "Jobe Kinteh",
+                "name": "Binta Darboe",
+                "gender": "Female",
                 "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/jobe-kinteh"
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/binta-darboe"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "district": "Kombo Central",
+        "wards": [
+          {
+            "ward": "Brikama Ward",
+            "farmers": [
+              {
+                "name": "Alieu Sonko",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/alieu-sonko"
               },
               {
-                "name": "Ousman Manneh",
+                "name": "Kaddy Jarju",
+                "gender": "Female",
                 "village": "Barrow Kunda",
-                "capacity": "500 eggs per month",
-                "website": "https://gambiapoultryfarmers.org/farmers/ousman-manneh"
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/kaddy-jarju"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "region": "North Bank Region (Kerewan)",
+    "districts": [
+      {
+        "district": "Lower Niumi",
+        "wards": [
+          {
+            "ward": "Barra Ward",
+            "farmers": [
+              {
+                "name": "Pa Cham",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/pa-cham"
+              },
+              {
+                "name": "Sukina Trawally",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/sukina-trawally"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "district": "Upper Niumi",
+        "wards": [
+          {
+            "ward": "Kerr Devili Ward",
+            "farmers": [
+              {
+                "name": "Yankuba Sillah",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/yankuba-sillah"
+              },
+              {
+                "name": "Ramatoulie Jobe",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/ramatoulie-jobe"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "region": "Lower River Region (Mansa Konko)", 
+    "districts": [
+      {
+        "district": "Jarra East",
+        "wards": [
+          {
+            "ward": "Bureng Ward",
+            "farmers": [
+              {
+                "name": "Samba Sarr",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/samba-sarr"
+              },
+              {
+                "name": "Fatoumata Tamba",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/fatoumata-tamba"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "district": "Kiang West",
+        "wards": [
+          {
+            "ward": "Tendaba Ward",
+            "farmers": [
+              {
+                "name": "Bubacarr Jawo",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/bubacarr-jawo"
+              },
+              {
+                "name": "Aja Mballow",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/aja-mballow"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "region": "Central River Region (Janjanbureh)",
+    "districts": [
+      {
+        "district": "Janjanbureh",
+        "wards": [
+          {
+            "ward": "Janjanbureh Town Ward",
+            "farmers": [
+              {
+                "name": "Lamin Kante",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/lamin-kante"
+              },
+              {
+                "name": "Maimuna Nyassi",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/maimuna-nyassi"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "district": "Niamina East",
+        "wards": [
+          {
+            "ward": "Sapu Ward",
+            "farmers": [
+              {
+                "name": "Ebrima Camara",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/ebrima-camara"
+              },
+              {
+                "name": "Ndey Gomez",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/ndey-gomez"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "region": "Upper River Region (Basse)",
+    "districts": [
+      {
+        "district": "Fulladu East",
+        "wards": [
+          {
+            "ward": "Basse Ward",
+            "farmers": [
+              {
+                "name": "Ousman Fofana",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/ousman-fofana"
+              },
+              {
+                "name": "Kumba Senghore",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/kumba-senghore"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "district": "Kantora",
+        "wards": [
+          {
+            "ward": "Koina Ward",
+            "farmers": [
+              {
+                "name": "Momodou Manneh",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/momodou-manneh"
+              },
+              {
+                "name": "Saffie Boima",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 500,
+                "website": "https://gambiapoultryfarmers.org/farmers/saffie-boima"
               }
             ]
           }
@@ -359,7 +532,7 @@ const fullData = [
   }
 ];
 
-// Calculate statistics
+// Calculate statistics with auto-calculation
 function calculateStatistics() {
   let totalFarmers = 0;
   let totalProduction = 0;
@@ -374,8 +547,8 @@ function calculateStatistics() {
         ward.farmers.forEach(farmer => {
           regionFarmers++;
           totalFarmers++;
-          // Extract number from capacity string and calculate monthly production
-          const production = parseInt(farmer.capacity) || 500;
+          // Use the actual capacity number for calculation
+          const production = farmer.capacity;
           regionProduction += production;
           totalProduction += production;
         });
@@ -384,14 +557,18 @@ function calculateStatistics() {
     
     regionStats[region.region] = {
       farmers: regionFarmers,
-      production: regionProduction
+      production: regionProduction,
+      districts: region.districts.length,
+      wards: region.districts.reduce((acc, district) => acc + district.wards.length, 0)
     };
   });
   
   return {
     totalFarmers,
     totalProduction,
-    regionStats
+    regionStats,
+    totalDistricts: fullData.reduce((acc, region) => acc + region.districts.length, 0),
+    totalWards: fullData.reduce((acc, region) => acc + region.districts.reduce((acc2, district) => acc2 + district.wards.length, 0), 0)
   };
 }
 
@@ -409,6 +586,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const viewStatsTop = document.getElementById('viewStatsTop');
   
   let currentView = 'regions';
+  let currentRegion = '';
   
   // Populate region list and filters
   function initializeRegions() {
@@ -421,11 +599,15 @@ document.addEventListener('DOMContentLoaded', function() {
       // Add to region list
       const li = document.createElement('li');
       li.className = 'region-item';
+      const stats = calculateStatistics();
       li.innerHTML = `
         <span>${region.region}</span>
         <span class="small-muted">${region.districts.length} districts</span>
       `;
-      li.addEventListener('click', () => showRegion(region.region));
+      li.addEventListener('click', () => {
+        showRegion(region.region);
+        currentRegion = region.region;
+      });
       regionList.appendChild(li);
       
       // Add to region filter
@@ -454,6 +636,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show first region by default
     if (fullData.length > 0) {
       showRegion(fullData[0].region);
+      currentRegion = fullData[0].region;
       regionList.children[0].classList.add('active');
     }
   }
@@ -472,6 +655,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     const stats = calculateStatistics();
+    const regionStat = stats.regionStats[regionName];
     
     contentArea.innerHTML = `
       <div class="dashboard">
@@ -480,25 +664,29 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="stat-row">
             <div class="stat">
               <div class="small-muted">Total Districts</div>
-              <h3>${region.districts.length}</h3>
+              <h3>${regionStat.districts}</h3>
             </div>
             <div class="stat">
               <div class="small-muted">Total Wards</div>
-              <h3>${region.districts.reduce((acc, district) => acc + district.wards.length, 0)}</h3>
+              <h3>${regionStat.wards}</h3>
             </div>
             <div class="stat">
               <div class="small-muted">Total Farmers</div>
-              <h3>${stats.regionStats[regionName].farmers}</h3>
+              <h3>${regionStat.farmers}</h3>
             </div>
             <div class="stat">
               <div class="small-muted">Monthly Production</div>
-              <h3>${stats.regionStats[regionName].production.toLocaleString()} eggs</h3>
+              <h3>${regionStat.production.toLocaleString()} eggs</h3>
             </div>
           </div>
         </div>
         <div class="dash-card">
           <h4 style="color:var(--gold);margin-top:0">National Statistics</h4>
           <div class="region-summary">
+            <div class="region-line">
+              <span>Total Regions:</span>
+              <span>${fullData.length}</span>
+            </div>
             <div class="region-line">
               <span>Total Farmers:</span>
               <span>${stats.totalFarmers}</span>
@@ -541,8 +729,8 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="tinfo">
               <b>${farmer.name}</b>
-              <div class="tmeta">Village: ${farmer.village}</div>
-              <div class="tmeta">Capacity: ${farmer.capacity}</div>
+              <div class="tmeta">Gender: ${farmer.gender} | Village: ${farmer.village}</div>
+              <div class="tmeta">Capacity: ${farmer.capacity} eggs per month</div>
               <div class="tmeta"><a href="${farmer.website}" target="_blank" style="color:var(--gold)">View Profile</a></div>
             </div>
           `;
@@ -575,11 +763,11 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="stat">
               <div class="small-muted">Total Districts</div>
-              <h3>${fullData.reduce((acc, region) => acc + region.districts.length, 0)}</h3>
+              <h3>${stats.totalDistricts}</h3>
             </div>
             <div class="stat">
               <div class="small-muted">Total Wards</div>
-              <h3>${fullData.reduce((acc, region) => acc + region.districts.reduce((acc2, district) => acc2 + district.wards.length, 0), 0)}</h3>
+              <h3>${stats.totalWards}</h3>
             </div>
             <div class="stat">
               <div class="small-muted">Total Farmers</div>
@@ -613,20 +801,29 @@ document.addEventListener('DOMContentLoaded', function() {
             <thead>
               <tr>
                 <th>Region</th>
+                <th>Districts</th>
+                <th>Wards</th>
                 <th>Farmers</th>
                 <th>Monthly Production</th>
-                <th>Annual Production</th>
               </tr>
             </thead>
             <tbody>
               ${Object.entries(stats.regionStats).map(([region, data]) => `
                 <tr>
                   <td>${region}</td>
+                  <td>${data.districts}</td>
+                  <td>${data.wards}</td>
                   <td>${data.farmers}</td>
                   <td>${data.production.toLocaleString()} eggs</td>
-                  <td>${(data.production * 12).toLocaleString()} eggs</td>
                 </tr>
               `).join('')}
+              <tr style="background:rgba(212,175,55,0.1)">
+                <td><strong>NATIONAL TOTAL</strong></td>
+                <td><strong>${stats.totalDistricts}</strong></td>
+                <td><strong>${stats.totalWards}</strong></td>
+                <td><strong>${stats.totalFarmers}</strong></td>
+                <td><strong>${stats.totalProduction.toLocaleString()} eggs</strong></td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -640,7 +837,9 @@ document.addEventListener('DOMContentLoaded', function() {
   tabRegions.addEventListener('click', () => {
     tabRegions.classList.add('active');
     tabStats.classList.remove('active');
-    if (fullData.length > 0) {
+    if (currentRegion) {
+      showRegion(currentRegion);
+    } else if (fullData.length > 0) {
       showRegion(fullData[0].region);
     }
   });
@@ -660,9 +859,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const wardValue = wardFilter.value;
     const searchValue = searchInput.value.toLowerCase();
     
-    // This is a simplified filter implementation
-    // In a real application, you would want more sophisticated filtering
-    console.log('Filters applied:', { regionValue, districtValue, wardValue, searchValue });
+    // Reset all regions active state
+    Array.from(regionList.children).forEach(item => item.classList.remove('active'));
+    
+    if (regionValue) {
+      // Find and activate the selected region
+      Array.from(regionList.children).forEach(item => {
+        if (item.textContent.includes(regionValue)) {
+          item.classList.add('active');
+          showRegion(regionValue);
+          currentRegion = regionValue;
+        }
+      });
+    } else if (districtValue || wardValue || searchValue) {
+      // Complex filtering would go here
+      // For now, just show statistics if filters are applied without region
+      showStatistics();
+    } else {
+      // No filters - show first region
+      if (fullData.length > 0) {
+        showRegion(fullData[0].region);
+        currentRegion = fullData[0].region;
+        regionList.children[0].classList.add('active');
+      }
+    }
   }
   
   regionFilter.addEventListener('change', applyFilters);
