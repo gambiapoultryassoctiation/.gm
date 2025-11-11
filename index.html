@@ -77,7 +77,10 @@
   .stats-table th,.stats-table td{padding:.6rem;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
   .small-muted{color:var(--muted);font-size:.9rem}
   .export-buttons{display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap}
-  @media (max-width:980px){main{grid-template-columns:1fr} .dashboard{grid-template-columns:1fr} .controls{flex-direction:column;align-items:stretch}}
+  .region-export{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+  .region-export h3{margin:0;color:var(--gold)}
+  .export-actions{display:flex;gap:.6rem}
+  @media (max-width:980px){main{grid-template-columns:1fr} .dashboard{grid-template-columns:1fr} .controls{flex-direction:column;align-items:stretch} .region-export{flex-direction:column;align-items:flex-start;gap:.6rem}}
 </style>
 </head>
 <body>
@@ -606,7 +609,7 @@ function calculateStatistics() {
   };
 }
 
-// Export to CSV function
+// Export to CSV function for all data
 function exportToCSV() {
   const stats = calculateStatistics();
   
@@ -655,6 +658,220 @@ function exportToCSV() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+}
+
+// Export to CSV for a specific region
+function exportRegionToCSV(regionName) {
+  const stats = calculateStatistics();
+  const regionData = fullData.find(r => r.region === regionName);
+  
+  if (!regionData) return;
+  
+  const regionStat = stats.regionStats[regionName];
+  
+  let csvContent = `Gambia Poultry Farmers Association - ${regionName} Region Report\n\n`;
+  
+  // Region Statistics
+  csvContent += "REGION STATISTICS\n";
+  csvContent += "Region," + regionName + "\n";
+  csvContent += "Total Districts," + regionStat.districts + "\n";
+  csvContent += "Total Wards," + regionStat.wards + "\n";
+  csvContent += "Total Farmers," + regionStat.farmers + "\n";
+  csvContent += "Monthly Production," + regionStat.production + " eggs\n";
+  csvContent += "Annual Production," + (regionStat.production * 12) + " eggs\n\n";
+  
+  // District Breakdown
+  csvContent += "DISTRICT BREAKDOWN\n";
+  csvContent += "District,Wards,Farmers,Monthly Production,Annual Production\n";
+  
+  regionData.districts.forEach(district => {
+    let districtFarmers = 0;
+    let districtProduction = 0;
+    
+    district.wards.forEach(ward => {
+      ward.farmers.forEach(farmer => {
+        districtFarmers++;
+        districtProduction += farmer.capacity;
+      });
+    });
+    
+    csvContent += `"${district.district}",${district.wards.length},${districtFarmers},${districtProduction} eggs,${districtProduction * 12} eggs\n`;
+  });
+  
+  csvContent += `"REGION TOTAL",${regionStat.wards},${regionStat.farmers},${regionStat.production} eggs,${regionStat.production * 12} eggs\n\n`;
+  
+  // Farmer Details
+  csvContent += "FARMER DETAILS\n";
+  csvContent += "District,Ward,Name,Gender,Village,Capacity (eggs/month),Contact,Website\n";
+  
+  regionData.districts.forEach(district => {
+    district.wards.forEach(ward => {
+      ward.farmers.forEach(farmer => {
+        csvContent += `"${district.district}","${ward.ward}","${farmer.name}","${farmer.gender}","${farmer.village}",${farmer.capacity},"${farmer.contact || 'Not provided'}","${farmer.website}"\n`;
+      });
+    });
+  });
+  
+  // Create and download CSV file
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  link.setAttribute('href', url);
+  link.setAttribute('download', `${regionName.toLowerCase().replace(/\s+/g, '_')}_poultry_farmers.csv`);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Print function for a specific region
+function printRegion(regionName) {
+  const stats = calculateStatistics();
+  const regionData = fullData.find(r => r.region === regionName);
+  
+  if (!regionData) return;
+  
+  const regionStat = stats.regionStats[regionName];
+  
+  let printContent = `
+    <html>
+    <head>
+    <title>${regionName} Region - Gambia Poultry Farmers Association</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 20px; }
+      h1 { color: #333; border-bottom: 2px solid #d4af37; padding-bottom: 10px; }
+      h2 { color: #555; margin-top: 20px; }
+      table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+      th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+      th { background-color: #f2f2f2; }
+      .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+      .stat-card { border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+      .stat-value { font-size: 24px; font-weight: bold; color: #d4af37; }
+      .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #777; }
+    </style>
+    </head>
+    <body>
+      <h1>Gambia Poultry Farmers Association</h1>
+      <h2>${regionName} Region Report</h2>
+      
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div>Total Districts</div>
+          <div class="stat-value">${regionStat.districts}</div>
+        </div>
+        <div class="stat-card">
+          <div>Total Wards</div>
+          <div class="stat-value">${regionStat.wards}</div>
+        </div>
+        <div class="stat-card">
+          <div>Total Farmers</div>
+          <div class="stat-value">${regionStat.farmers}</div>
+        </div>
+        <div class="stat-card">
+          <div>Monthly Production</div>
+          <div class="stat-value">${regionStat.production.toLocaleString()} eggs</div>
+        </div>
+      </div>
+      
+      <h2>District Breakdown</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>District</th>
+            <th>Wards</th>
+            <th>Farmers</th>
+            <th>Monthly Production</th>
+            <th>Annual Production</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+  
+  regionData.districts.forEach(district => {
+    let districtFarmers = 0;
+    let districtProduction = 0;
+    
+    district.wards.forEach(ward => {
+      ward.farmers.forEach(farmer => {
+        districtFarmers++;
+        districtProduction += farmer.capacity;
+      });
+    });
+    
+    printContent += `
+      <tr>
+        <td>${district.district}</td>
+        <td>${district.wards.length}</td>
+        <td>${districtFarmers}</td>
+        <td>${districtProduction.toLocaleString()} eggs</td>
+        <td>${(districtProduction * 12).toLocaleString()} eggs</td>
+      </tr>
+    `;
+  });
+  
+  printContent += `
+        </tbody>
+        <tfoot>
+          <tr style="background-color: #f9f9f9; font-weight: bold;">
+            <td>REGION TOTAL</td>
+            <td>${regionStat.wards}</td>
+            <td>${regionStat.farmers}</td>
+            <td>${regionStat.production.toLocaleString()} eggs</td>
+            <td>${(regionStat.production * 12).toLocaleString()} eggs</td>
+          </tr>
+        </tfoot>
+      </table>
+      
+      <h2>Farmer Details</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>District</th>
+            <th>Ward</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Village</th>
+            <th>Capacity (eggs/month)</th>
+            <th>Contact</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+  
+  regionData.districts.forEach(district => {
+    district.wards.forEach(ward => {
+      ward.farmers.forEach(farmer => {
+        printContent += `
+          <tr>
+            <td>${district.district}</td>
+            <td>${ward.ward}</td>
+            <td>${farmer.name}</td>
+            <td>${farmer.gender}</td>
+            <td>${farmer.village}</td>
+            <td>${farmer.capacity}</td>
+            <td>${farmer.contact || 'Not provided'}</td>
+          </tr>
+        `;
+      });
+    });
+  });
+  
+  printContent += `
+        </tbody>
+      </table>
+      
+      <div class="footer">
+        <p>Generated on ${new Date().toLocaleDateString()}</p>
+        <p>Gambia Poultry Farmers Association - Data maintained for nationwide poultry farming development.</p>
+      </div>
+    </body>
+    </html>
+  `;
+  
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(printContent);
+  printWindow.document.close();
+  printWindow.print();
 }
 
 // Initialize the application
@@ -823,6 +1040,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const regionStat = currentRegion ? stats.regionStats[currentRegion] : null;
     
     contentArea.innerHTML = `
+      <div class="region-export">
+        <h3>${title}</h3>
+        <div class="export-actions">
+          ${currentRegion ? `
+            <button class="btn-secondary" onclick="exportRegionToCSV('${currentRegion}')">📥 Export ${currentRegion} CSV</button>
+            <button class="btn-secondary" onclick="printRegion('${currentRegion}')">🖨️ Print ${currentRegion}</button>
+          ` : ''}
+          <button class="btn" onclick="exportToCSV()">📊 Download All Data CSV</button>
+        </div>
+      </div>
       <div class="dashboard">
         <div class="dash-card">
           <h3 style="margin-top:0;color:var(--gold)">${title}</h3>
@@ -980,7 +1207,7 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
           
           <div class="export-buttons">
-            <button class="btn" onclick="exportToCSV()">📊 Download CSV Report</button>
+            <button class="btn" onclick="exportToCSV()">📊 Download National CSV Report</button>
             <button class="btn-secondary" onclick="window.print()">🖨️ Print Statistics</button>
           </div>
         </div>
@@ -995,6 +1222,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <th>Wards</th>
                 <th>Farmers</th>
                 <th>Monthly Production</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -1005,6 +1233,10 @@ document.addEventListener('DOMContentLoaded', function() {
                   <td>${data.wards}</td>
                   <td>${data.farmers}</td>
                   <td>${data.production.toLocaleString()} eggs</td>
+                  <td>
+                    <button class="btn-secondary" onclick="exportRegionToCSV('${region}')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">CSV</button>
+                    <button class="btn-secondary" onclick="printRegion('${region}')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-left: 0.25rem;">Print</button>
+                  </td>
                 </tr>
               `).join('')}
               <tr style="background:rgba(212,175,55,0.1)">
@@ -1013,13 +1245,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td><strong>${stats.totalWards}</strong></td>
                 <td><strong>${stats.totalFarmers}</strong></td>
                 <td><strong>${stats.totalProduction.toLocaleString()} eggs</strong></td>
+                <td></td>
               </tr>
             </tbody>
           </table>
-          
-          <div class="export-buttons">
-            <button class="btn-secondary" onclick="exportToCSV()">📥 Export Full Data to CSV</button>
-          </div>
         </div>
       </div>
     `;
