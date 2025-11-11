@@ -672,6 +672,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
   let currentView = 'regions';
   let currentRegion = '';
+  let currentDistrict = '';
+  let currentWard = '';
   
   // Populate region list and filters
   function initializeRegions() {
@@ -692,6 +694,8 @@ document.addEventListener('DOMContentLoaded', function() {
       li.addEventListener('click', () => {
         showRegion(region.region);
         currentRegion = region.region;
+        currentDistrict = '';
+        currentWard = '';
         // Update filters to show only selected region
         updateDistrictFilter(region.region);
         updateWardFilter(region.region, '');
@@ -763,42 +767,81 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  // Show region details - ONLY shows selected region
-  function showRegion(regionName) {
-    const region = fullData.find(r => r.region === regionName);
-    if (!region) return;
-    
-    // Update active region in list
-    Array.from(regionList.children).forEach(item => {
-      item.classList.remove('active');
-      if (item.textContent.includes(regionName)) {
-        item.classList.add('active');
-      }
-    });
-    
+  // Show filtered content based on current selections
+  function showFilteredContent() {
     const stats = calculateStatistics();
-    const regionStat = stats.regionStats[regionName];
+    
+    // Determine what to show based on current selections
+    let title = "National Overview";
+    let filteredData = [];
+    
+    if (currentWard && currentDistrict && currentRegion) {
+      // Show specific ward
+      title = `${currentWard} - ${currentDistrict} - ${currentRegion}`;
+      const region = fullData.find(r => r.region === currentRegion);
+      if (region) {
+        const district = region.districts.find(d => d.district === currentDistrict);
+        if (district) {
+          const ward = district.wards.find(w => w.ward === currentWard);
+          if (ward) {
+            filteredData = [{
+              region: currentRegion,
+              districts: [{
+                district: currentDistrict,
+                wards: [ward]
+              }]
+            }];
+          }
+        }
+      }
+    } else if (currentDistrict && currentRegion) {
+      // Show specific district
+      title = `${currentDistrict} - ${currentRegion}`;
+      const region = fullData.find(r => r.region === currentRegion);
+      if (region) {
+        const district = region.districts.find(d => d.district === currentDistrict);
+        if (district) {
+          filteredData = [{
+            region: currentRegion,
+            districts: [district]
+          }];
+        }
+      }
+    } else if (currentRegion) {
+      // Show specific region
+      title = `${currentRegion} Region`;
+      const region = fullData.find(r => r.region === currentRegion);
+      if (region) {
+        filteredData = [region];
+      }
+    } else {
+      // Show all regions
+      title = "National Overview";
+      filteredData = fullData;
+    }
+    
+    const regionStat = currentRegion ? stats.regionStats[currentRegion] : null;
     
     contentArea.innerHTML = `
       <div class="dashboard">
         <div class="dash-card">
-          <h3 style="margin-top:0;color:var(--gold)">${regionName} Region Overview</h3>
+          <h3 style="margin-top:0;color:var(--gold)">${title}</h3>
           <div class="stat-row">
             <div class="stat">
               <div class="small-muted">Total Districts</div>
-              <h3>${regionStat.districts}</h3>
+              <h3>${currentRegion ? (regionStat ? regionStat.districts : '0') : stats.totalDistricts}</h3>
             </div>
             <div class="stat">
               <div class="small-muted">Total Wards</div>
-              <h3>${regionStat.wards}</h3>
+              <h3>${currentRegion ? (regionStat ? regionStat.wards : '0') : stats.totalWards}</h3>
             </div>
             <div class="stat">
               <div class="small-muted">Total Farmers</div>
-              <h3>${regionStat.farmers}</h3>
+              <h3>${currentRegion ? (regionStat ? regionStat.farmers : '0') : stats.totalFarmers}</h3>
             </div>
             <div class="stat">
               <div class="small-muted">Monthly Production</div>
-              <h3>${regionStat.production.toLocaleString()} eggs</h3>
+              <h3>${currentRegion ? (regionStat ? regionStat.production.toLocaleString() : '0') : stats.totalProduction.toLocaleString()} eggs</h3>
             </div>
           </div>
         </div>
@@ -826,50 +869,68 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     `;
     
-    // ONLY show districts and wards from the selected region
-    region.districts.forEach(district => {
-      const districtEl = document.createElement('div');
-      districtEl.className = 'district';
-      districtEl.innerHTML = `<h3 style="margin-top:0;color:var(--gold)">${district.district}</h3>`;
-      
-      const wardsGrid = document.createElement('div');
-      wardsGrid.className = 'wards-grid';
-      
-      district.wards.forEach(ward => {
-        const wardEl = document.createElement('div');
-        wardEl.className = 'ward';
-        wardEl.innerHTML = `<h4>${ward.ward}</h4>`;
+    // Render the filtered data
+    filteredData.forEach(region => {
+      region.districts.forEach(district => {
+        const districtEl = document.createElement('div');
+        districtEl.className = 'district';
+        districtEl.innerHTML = `<h3 style="margin-top:0;color:var(--gold)">${district.district}</h3>`;
         
-        const farmersList = document.createElement('div');
-        farmersList.className = 'section-row';
+        const wardsGrid = document.createElement('div');
+        wardsGrid.className = 'wards-grid';
         
-        ward.farmers.forEach(farmer => {
-          const farmerEl = document.createElement('div');
-          farmerEl.className = 'farmer';
-          farmerEl.innerHTML = `
-            <div class="avatar-wrap">
-              <div class="initials">${farmer.name.split(' ').map(n => n[0]).join('')}</div>
-            </div>
-            <div class="tinfo">
-              <b>${farmer.name}</b>
-              <div class="tmeta">Gender: ${farmer.gender} | Village: ${farmer.village}</div>
-              <div class="tmeta">Capacity: ${farmer.capacity} eggs per month</div>
-              <div class="tmeta">Contact: ${farmer.contact || 'Not provided'}</div>
-              <div class="tmeta"><a href="${farmer.website}" target="_blank" style="color:var(--gold)">View Profile</a></div>
-            </div>
-          `;
-          farmersList.appendChild(farmerEl);
+        district.wards.forEach(ward => {
+          const wardEl = document.createElement('div');
+          wardEl.className = 'ward';
+          wardEl.innerHTML = `<h4>${ward.ward}</h4>`;
+          
+          const farmersList = document.createElement('div');
+          farmersList.className = 'section-row';
+          
+          ward.farmers.forEach(farmer => {
+            const farmerEl = document.createElement('div');
+            farmerEl.className = 'farmer';
+            farmerEl.innerHTML = `
+              <div class="avatar-wrap">
+                <div class="initials">${farmer.name.split(' ').map(n => n[0]).join('')}</div>
+              </div>
+              <div class="tinfo">
+                <b>${farmer.name}</b>
+                <div class="tmeta">Gender: ${farmer.gender} | Village: ${farmer.village}</div>
+                <div class="tmeta">Capacity: ${farmer.capacity} eggs per month</div>
+                <div class="tmeta">Contact: ${farmer.contact || 'Not provided'}</div>
+                <div class="tmeta"><a href="${farmer.website}" target="_blank" style="color:var(--gold)">View Profile</a></div>
+              </div>
+            `;
+            farmersList.appendChild(farmerEl);
+          });
+          
+          wardEl.appendChild(farmersList);
+          wardsGrid.appendChild(wardEl);
         });
         
-        wardEl.appendChild(farmersList);
-        wardsGrid.appendChild(wardEl);
+        districtEl.appendChild(wardsGrid);
+        contentArea.appendChild(districtEl);
       });
-      
-      districtEl.appendChild(wardsGrid);
-      contentArea.appendChild(districtEl);
     });
     
     currentView = 'regions';
+  }
+  
+  // Show region details
+  function showRegion(regionName) {
+    currentRegion = regionName;
+    currentDistrict = '';
+    currentWard = '';
+    showFilteredContent();
+    
+    // Update active region in list
+    Array.from(regionList.children).forEach(item => {
+      item.classList.remove('active');
+      if (item.textContent.includes(regionName)) {
+        item.classList.add('active');
+      }
+    });
   }
   
   // Show statistics view
@@ -971,7 +1032,7 @@ document.addEventListener('DOMContentLoaded', function() {
     tabRegions.classList.add('active');
     tabStats.classList.remove('active');
     if (currentRegion) {
-      showRegion(currentRegion);
+      showFilteredContent();
     } else if (fullData.length > 0) {
       showRegion(fullData[0].region);
     }
@@ -990,7 +1051,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const regionValue = regionFilter.value;
     const districtValue = districtFilter.value;
     const wardValue = wardFilter.value;
-    const searchValue = searchInput.value.toLowerCase();
+    
+    // Update current selections
+    currentRegion = regionValue || '';
+    currentDistrict = districtValue || '';
+    currentWard = wardValue || '';
     
     // Reset all regions active state
     Array.from(regionList.children).forEach(item => item.classList.remove('active'));
@@ -1000,20 +1065,16 @@ document.addEventListener('DOMContentLoaded', function() {
       Array.from(regionList.children).forEach(item => {
         if (item.textContent.includes(regionValue)) {
           item.classList.add('active');
-          showRegion(regionValue);
-          currentRegion = regionValue;
-          updateDistrictFilter(regionValue);
         }
       });
-    } else if (districtValue || wardValue || searchValue) {
-      // Complex filtering would go here
-      // For now, just show statistics if filters are applied without region
-      showStatistics();
+    }
+    
+    if (regionValue || districtValue || wardValue) {
+      showFilteredContent();
     } else {
       // No filters - show first region
       if (fullData.length > 0) {
         showRegion(fullData[0].region);
-        currentRegion = fullData[0].region;
         regionList.children[0].classList.add('active');
         updateDistrictFilter(fullData[0].region);
       }
