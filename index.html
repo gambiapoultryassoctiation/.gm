@@ -80,6 +80,12 @@
   .region-export{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
   .region-export h3{margin:0;color:var(--gold)}
   .export-actions{display:flex;gap:.6rem}
+  .farmer-type-badge{display:inline-block;padding:0.2rem 0.5rem;border-radius:6px;font-size:0.75rem;font-weight:600;margin-left:0.5rem}
+  .egg-badge{background:rgba(212,175,55,0.2);color:var(--gold)}
+  .meat-badge{background:rgba(255,100,100,0.2);color:#ff6464}
+  .farmer-type-toggle{display:flex;gap:.6rem;margin-bottom:1rem;background:var(--glass);padding:.5rem;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+  .type-toggle-btn{flex:1;padding:.5rem;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;cursor:pointer;color:inherit}
+  .type-toggle-btn.active{background:linear-gradient(90deg,var(--gold),#ffd27f);color:#08101a;font-weight:700}
   @media (max-width:980px){main{grid-template-columns:1fr} .dashboard{grid-template-columns:1fr} .controls{flex-direction:column;align-items:stretch} .region-export{flex-direction:column;align-items:flex-start;gap:.6rem}}
 </style>
 </head>
@@ -104,6 +110,11 @@
       <select id="regionFilter"><option value="">All Regions</option></select>
       <select id="districtFilter"><option value="">All Districts</option></select>
       <select id="wardFilter"><option value="">All Wards</option></select>
+      <select id="farmerTypeFilter">
+        <option value="all">All Farmers</option>
+        <option value="egg">Egg Producers</option>
+        <option value="meat">Meat Producers</option>
+      </select>
       <button class="btn" id="clearBtn">Clear</button>
     </div>
 
@@ -129,7 +140,7 @@
   </div>
 
 <script>
-// Complete data structure for all regions with 2 farmers per ward (1 male, 1 female)
+// Complete data structure for all 7 regions with egg farmers and broiler farmers
 const fullData = [
   {
     "region": "Banjul",
@@ -139,14 +150,15 @@ const fullData = [
         "wards": [
           {
             "ward": "Banjul Market Area Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Musa Ceesay",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/musa-ceesay",
-                "contact": "+220 123 4567"
+                "contact": "+220 123 4567",
+                "type": "egg"
               },
               {
                 "name": "Fatou Jallow",
@@ -154,20 +166,42 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/fatou-jallow",
-                "contact": "+220 234 5678"
+                "contact": "+220 234 5678",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Musa Ceesay",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/musa-ceesay-meat",
+                "contact": "+220 123 4567",
+                "type": "meat"
+              },
+              {
+                "name": "Fatou Jallow",
+                "gender": "Female", 
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/fatou-jallow-meat",
+                "contact": "+220 234 5678",
+                "type": "meat"
               }
             ]
           },
           {
             "ward": "Half-Die Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Ebrima Sanyang",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/ebrima-sanyang",
-                "contact": "+220 345 6789"
+                "contact": "+220 345 6789",
+                "type": "egg"
               },
               {
                 "name": "Aminata Bojang",
@@ -175,7 +209,28 @@ const fullData = [
                 "village": "Barrow Kunda", 
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/aminata-bojang",
-                "contact": "+220 456 7890"
+                "contact": "+220 456 7890",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Ebrima Sanyang",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/ebrima-sanyang-meat",
+                "contact": "+220 345 6789",
+                "type": "meat"
+              },
+              {
+                "name": "Aminata Bojang",
+                "gender": "Female",
+                "village": "Barrow Kunda", 
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/aminata-bojang-meat",
+                "contact": "+220 456 7890",
+                "type": "meat"
               }
             ]
           }
@@ -186,14 +241,15 @@ const fullData = [
         "wards": [
           {
             "ward": "New Town Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Lamin Touray",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/lamin-touray",
-                "contact": "+220 567 8901"
+                "contact": "+220 567 8901",
+                "type": "egg"
               },
               {
                 "name": "Isatou Camara",
@@ -201,7 +257,28 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/isatou-camara",
-                "contact": "+220 678 9012"
+                "contact": "+220 678 9012",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Lamin Touray",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/lamin-touray-meat",
+                "contact": "+220 567 8901",
+                "type": "meat"
+              },
+              {
+                "name": "Isatou Camara",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/isatou-camara-meat",
+                "contact": "+220 678 9012",
+                "type": "meat"
               }
             ]
           }
@@ -217,14 +294,15 @@ const fullData = [
         "wards": [
           {
             "ward": "Serekunda Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Ousman Jatta",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/ousman-jatta",
-                "contact": "+220 789 0123"
+                "contact": "+220 789 0123",
+                "type": "egg"
               },
               {
                 "name": "Mariama Colley",
@@ -232,20 +310,42 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/mariama-colley",
-                "contact": "+220 890 1234"
+                "contact": "+220 890 1234",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Ousman Jatta",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/ousman-jatta-meat",
+                "contact": "+220 789 0123",
+                "type": "meat"
+              },
+              {
+                "name": "Mariama Colley",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/mariama-colley-meat",
+                "contact": "+220 890 1234",
+                "type": "meat"
               }
             ]
           },
           {
             "ward": "Bakau Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Modou Njie",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/modou-njie",
-                "contact": "+220 901 2345"
+                "contact": "+220 901 2345",
+                "type": "egg"
               },
               {
                 "name": "Hawa Bah",
@@ -253,7 +353,28 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/hawa-bah",
-                "contact": "+220 012 3456"
+                "contact": "+220 012 3456",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Modou Njie",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/modou-njie-meat",
+                "contact": "+220 901 2345",
+                "type": "meat"
+              },
+              {
+                "name": "Hawa Bah",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/hawa-bah-meat",
+                "contact": "+220 012 3456",
+                "type": "meat"
               }
             ]
           }
@@ -269,14 +390,15 @@ const fullData = [
         "wards": [
           {
             "ward": "Sanyang Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Kebba Sowe",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/kebba-sowe",
-                "contact": "+220 123 9876"
+                "contact": "+220 123 9876",
+                "type": "egg"
               },
               {
                 "name": "Adama Sanneh",
@@ -284,20 +406,42 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/adama-sanneh",
-                "contact": "+220 234 8765"
+                "contact": "+220 234 8765",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Kebba Sowe",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/kebba-sowe-meat",
+                "contact": "+220 123 9876",
+                "type": "meat"
+              },
+              {
+                "name": "Adama Sanneh",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/adama-sanneh-meat",
+                "contact": "+220 234 8765",
+                "type": "meat"
               }
             ]
           },
           {
             "ward": "Tanji Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Sainey Lowe",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/sainey-lowe",
-                "contact": "+220 345 7654"
+                "contact": "+220 345 7654",
+                "type": "egg"
               },
               {
                 "name": "Binta Darboe",
@@ -305,7 +449,28 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/binta-darboe",
-                "contact": "+220 456 6543"
+                "contact": "+220 456 6543",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Sainey Lowe",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/sainey-lowe-meat",
+                "contact": "+220 345 7654",
+                "type": "meat"
+              },
+              {
+                "name": "Binta Darboe",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/binta-darboe-meat",
+                "contact": "+220 456 6543",
+                "type": "meat"
               }
             ]
           }
@@ -316,14 +481,15 @@ const fullData = [
         "wards": [
           {
             "ward": "Brikama Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Alieu Sonko",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/alieu-sonko",
-                "contact": "+220 567 5432"
+                "contact": "+220 567 5432",
+                "type": "egg"
               },
               {
                 "name": "Kaddy Jarju",
@@ -331,7 +497,28 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/kaddy-jarju",
-                "contact": "+220 678 4321"
+                "contact": "+220 678 4321",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Alieu Sonko",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/alieu-sonko-meat",
+                "contact": "+220 567 5432",
+                "type": "meat"
+              },
+              {
+                "name": "Kaddy Jarju",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/kaddy-jarju-meat",
+                "contact": "+220 678 4321",
+                "type": "meat"
               }
             ]
           }
@@ -347,14 +534,15 @@ const fullData = [
         "wards": [
           {
             "ward": "Barra Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Pa Cham",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/pa-cham",
-                "contact": "+220 789 3210"
+                "contact": "+220 789 3210",
+                "type": "egg"
               },
               {
                 "name": "Sukina Trawally",
@@ -362,7 +550,28 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/sukina-trawally",
-                "contact": "+220 890 2109"
+                "contact": "+220 890 2109",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Pa Cham",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/pa-cham-meat",
+                "contact": "+220 789 3210",
+                "type": "meat"
+              },
+              {
+                "name": "Sukina Trawally",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/sukina-trawally-meat",
+                "contact": "+220 890 2109",
+                "type": "meat"
               }
             ]
           }
@@ -373,14 +582,15 @@ const fullData = [
         "wards": [
           {
             "ward": "Kerr Devili Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Yankuba Sillah",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/yankuba-sillah",
-                "contact": "+220 901 1098"
+                "contact": "+220 901 1098",
+                "type": "egg"
               },
               {
                 "name": "Ramatoulie Jobe",
@@ -388,7 +598,28 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/ramatoulie-jobe",
-                "contact": "+220 012 0987"
+                "contact": "+220 012 0987",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Yankuba Sillah",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/yankuba-sillah-meat",
+                "contact": "+220 901 1098",
+                "type": "meat"
+              },
+              {
+                "name": "Ramatoulie Jobe",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/ramatoulie-jobe-meat",
+                "contact": "+220 012 0987",
+                "type": "meat"
               }
             ]
           }
@@ -404,14 +635,15 @@ const fullData = [
         "wards": [
           {
             "ward": "Bureng Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Samba Sarr",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/samba-sarr",
-                "contact": "+220 123 5555"
+                "contact": "+220 123 5555",
+                "type": "egg"
               },
               {
                 "name": "Fatoumata Tamba",
@@ -419,7 +651,28 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/fatoumata-tamba",
-                "contact": "+220 234 6666"
+                "contact": "+220 234 6666",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Samba Sarr",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/samba-sarr-meat",
+                "contact": "+220 123 5555",
+                "type": "meat"
+              },
+              {
+                "name": "Fatoumata Tamba",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/fatoumata-tamba-meat",
+                "contact": "+220 234 6666",
+                "type": "meat"
               }
             ]
           }
@@ -430,14 +683,15 @@ const fullData = [
         "wards": [
           {
             "ward": "Tendaba Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Bubacarr Jawo",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/bubacarr-jawo",
-                "contact": "+220 345 7777"
+                "contact": "+220 345 7777",
+                "type": "egg"
               },
               {
                 "name": "Aja Mballow",
@@ -445,7 +699,28 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/aja-mballow",
-                "contact": "+220 456 8888"
+                "contact": "+220 456 8888",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Bubacarr Jawo",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/bubacarr-jawo-meat",
+                "contact": "+220 345 7777",
+                "type": "meat"
+              },
+              {
+                "name": "Aja Mballow",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/aja-mballow-meat",
+                "contact": "+220 456 8888",
+                "type": "meat"
               }
             ]
           }
@@ -461,14 +736,15 @@ const fullData = [
         "wards": [
           {
             "ward": "Janjanbureh Town Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Lamin Kante",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/lamin-kante",
-                "contact": "+220 567 9999"
+                "contact": "+220 567 9999",
+                "type": "egg"
               },
               {
                 "name": "Maimuna Nyassi",
@@ -476,7 +752,28 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/maimuna-nyassi",
-                "contact": "+220 678 0000"
+                "contact": "+220 678 0000",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Lamin Kante",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/lamin-kante-meat",
+                "contact": "+220 567 9999",
+                "type": "meat"
+              },
+              {
+                "name": "Maimuna Nyassi",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/maimuna-nyassi-meat",
+                "contact": "+220 678 0000",
+                "type": "meat"
               }
             ]
           }
@@ -487,14 +784,15 @@ const fullData = [
         "wards": [
           {
             "ward": "Sapu Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Ebrima Camara",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/ebrima-camara",
-                "contact": "+220 789 1111"
+                "contact": "+220 789 1111",
+                "type": "egg"
               },
               {
                 "name": "Ndey Gomez",
@@ -502,7 +800,28 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/ndey-gomez",
-                "contact": "+220 890 2222"
+                "contact": "+220 890 2222",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Ebrima Camara",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/ebrima-camara-meat",
+                "contact": "+220 789 1111",
+                "type": "meat"
+              },
+              {
+                "name": "Ndey Gomez",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/ndey-gomez-meat",
+                "contact": "+220 890 2222",
+                "type": "meat"
               }
             ]
           }
@@ -518,14 +837,15 @@ const fullData = [
         "wards": [
           {
             "ward": "Basse Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Ousman Fofana",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/ousman-fofana",
-                "contact": "+220 901 3333"
+                "contact": "+220 901 3333",
+                "type": "egg"
               },
               {
                 "name": "Kumba Senghore",
@@ -533,7 +853,28 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/kumba-senghore",
-                "contact": "+220 012 4444"
+                "contact": "+220 012 4444",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Ousman Fofana",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/ousman-fofana-meat",
+                "contact": "+220 901 3333",
+                "type": "meat"
+              },
+              {
+                "name": "Kumba Senghore",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/kumba-senghore-meat",
+                "contact": "+220 012 4444",
+                "type": "meat"
               }
             ]
           }
@@ -544,14 +885,15 @@ const fullData = [
         "wards": [
           {
             "ward": "Koina Ward",
-            "farmers": [
+            "eggFarmers": [
               {
                 "name": "Momodou Manneh",
                 "gender": "Male",
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/momodou-manneh",
-                "contact": "+220 123 7777"
+                "contact": "+220 123 7777",
+                "type": "egg"
               },
               {
                 "name": "Saffie Boima",
@@ -559,7 +901,28 @@ const fullData = [
                 "village": "Barrow Kunda",
                 "capacity": 500,
                 "website": "https://gambiapoultryfarmers.org/farmers/saffie-boima",
-                "contact": "+220 234 8888"
+                "contact": "+220 234 8888",
+                "type": "egg"
+              }
+            ],
+            "meatFarmers": [
+              {
+                "name": "Momodou Manneh",
+                "gender": "Male",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/momodou-manneh-meat",
+                "contact": "+220 123 7777",
+                "type": "meat"
+              },
+              {
+                "name": "Saffie Boima",
+                "gender": "Female",
+                "village": "Barrow Kunda",
+                "capacity": 300,
+                "website": "https://gambiapoultryfarmers.org/farmers/saffie-boima-meat",
+                "contact": "+220 234 8888",
+                "type": "meat"
               }
             ]
           }
@@ -570,7 +933,7 @@ const fullData = [
 ];
 
 // Calculate statistics with auto-calculation
-function calculateStatistics() {
+function calculateStatistics(farmerType = 'all') {
   let totalFarmers = 0;
   let totalProduction = 0;
   const regionStats = {};
@@ -581,14 +944,27 @@ function calculateStatistics() {
     
     region.districts.forEach(district => {
       district.wards.forEach(ward => {
-        ward.farmers.forEach(farmer => {
-          regionFarmers++;
-          totalFarmers++;
-          // Use the actual capacity number for calculation
-          const production = farmer.capacity;
-          regionProduction += production;
-          totalProduction += production;
-        });
+        // Count egg farmers
+        if (farmerType === 'all' || farmerType === 'egg') {
+          ward.eggFarmers.forEach(farmer => {
+            regionFarmers++;
+            totalFarmers++;
+            const production = farmer.capacity;
+            regionProduction += production;
+            totalProduction += production;
+          });
+        }
+        
+        // Count meat farmers
+        if (farmerType === 'all' || farmerType === 'meat') {
+          ward.meatFarmers.forEach(farmer => {
+            regionFarmers++;
+            totalFarmers++;
+            const production = farmer.capacity;
+            regionProduction += production;
+            totalProduction += production;
+          });
+        }
       });
     });
     
@@ -609,11 +985,23 @@ function calculateStatistics() {
   };
 }
 
-// Export to CSV function for all data
-function exportToCSV() {
-  const stats = calculateStatistics();
+// Calculate separate statistics for egg and meat farmers
+function calculateSeparateStatistics() {
+  const eggStats = calculateStatistics('egg');
+  const meatStats = calculateStatistics('meat');
   
-  let csvContent = "Gambia Poultry Farmers Association - Statistics Report\n\n";
+  return {
+    egg: eggStats,
+    meat: meatStats
+  };
+}
+
+// Export to CSV function for all data
+function exportToCSV(farmerType = 'all') {
+  const stats = calculateStatistics(farmerType);
+  const typeLabel = farmerType === 'egg' ? 'Egg' : farmerType === 'meat' ? 'Meat' : 'All';
+  
+  let csvContent = `Gambia Poultry Farmers Association - ${typeLabel} Farmers Statistics Report\n\n`;
   
   // National Statistics
   csvContent += "NATIONAL STATISTICS\n";
@@ -621,29 +1009,60 @@ function exportToCSV() {
   csvContent += "Total Districts," + stats.totalDistricts + "\n";
   csvContent += "Total Wards," + stats.totalWards + "\n";
   csvContent += "Total Farmers," + stats.totalFarmers + "\n";
-  csvContent += "Monthly Production," + stats.totalProduction + " eggs\n";
-  csvContent += "Annual Production," + (stats.totalProduction * 12) + " eggs\n\n";
+  
+  if (farmerType === 'egg') {
+    csvContent += "Monthly Production," + stats.totalProduction + " eggs\n";
+    csvContent += "Annual Production," + (stats.totalProduction * 12) + " eggs\n\n";
+  } else if (farmerType === 'meat') {
+    csvContent += "Monthly Production," + stats.totalProduction + " birds\n";
+    csvContent += "Annual Production," + (stats.totalProduction * 12) + " birds\n\n";
+  } else {
+    csvContent += "Monthly Production (Eggs)," + stats.totalProduction + " eggs\n";
+    csvContent += "Annual Production (Eggs)," + (stats.totalProduction * 12) + " eggs\n\n";
+  }
   
   // Regional Breakdown
   csvContent += "REGIONAL BREAKDOWN\n";
-  csvContent += "Region,Districts,Wards,Farmers,Monthly Production,Annual Production\n";
+  csvContent += "Region,Districts,Wards,Farmers,Monthly Production\n";
   
   Object.entries(stats.regionStats).forEach(([region, data]) => {
-    csvContent += `"${region}",${data.districts},${data.wards},${data.farmers},${data.production} eggs,${data.production * 12} eggs\n`;
+    if (farmerType === 'egg') {
+      csvContent += `"${region}",${data.districts},${data.wards},${data.farmers},${data.production} eggs\n`;
+    } else if (farmerType === 'meat') {
+      csvContent += `"${region}",${data.districts},${data.wards},${data.farmers},${data.production} birds\n`;
+    } else {
+      csvContent += `"${region}",${data.districts},${data.wards},${data.farmers},${data.production} units\n`;
+    }
   });
   
-  csvContent += `"NATIONAL TOTAL",${stats.totalDistricts},${stats.totalWards},${stats.totalFarmers},${stats.totalProduction} eggs,${stats.totalProduction * 12} eggs\n\n`;
+  if (farmerType === 'egg') {
+    csvContent += `"NATIONAL TOTAL",${stats.totalDistricts},${stats.totalWards},${stats.totalFarmers},${stats.totalProduction} eggs\n\n`;
+  } else if (farmerType === 'meat') {
+    csvContent += `"NATIONAL TOTAL",${stats.totalDistricts},${stats.totalWards},${stats.totalFarmers},${stats.totalProduction} birds\n\n`;
+  } else {
+    csvContent += `"NATIONAL TOTAL",${stats.totalDistricts},${stats.totalWards},${stats.totalFarmers},${stats.totalProduction} units\n\n`;
+  }
   
   // Farmer Details
   csvContent += "FARMER DETAILS\n";
-  csvContent += "Region,District,Ward,Name,Gender,Village,Capacity (eggs/month),Contact,Website\n";
+  csvContent += "Region,District,Ward,Name,Gender,Village,Type,Capacity,Contact,Website\n";
   
   fullData.forEach(region => {
     region.districts.forEach(district => {
       district.wards.forEach(ward => {
-        ward.farmers.forEach(farmer => {
-          csvContent += `"${region.region}","${district.district}","${ward.ward}","${farmer.name}","${farmer.gender}","${farmer.village}",${farmer.capacity},"${farmer.contact || 'Not provided'}","${farmer.website}"\n`;
-        });
+        // Egg farmers
+        if (farmerType === 'all' || farmerType === 'egg') {
+          ward.eggFarmers.forEach(farmer => {
+            csvContent += `"${region.region}","${district.district}","${ward.ward}","${farmer.name}","${farmer.gender}","${farmer.village}","Egg",${farmer.capacity} eggs/month,"${farmer.contact || 'Not provided'}","${farmer.website}"\n`;
+          });
+        }
+        
+        // Meat farmers
+        if (farmerType === 'all' || farmerType === 'meat') {
+          ward.meatFarmers.forEach(farmer => {
+            csvContent += `"${region.region}","${district.district}","${ward.ward}","${farmer.name}","${farmer.gender}","${farmer.village}","Meat",${farmer.capacity} birds/cycle,"${farmer.contact || 'Not provided'}","${farmer.website}"\n`;
+          });
+        }
       });
     });
   });
@@ -653,7 +1072,15 @@ function exportToCSV() {
   const link = document.createElement('a');
   const url = URL.createObjectURL(blob);
   link.setAttribute('href', url);
-  link.setAttribute('download', 'gambia_poultry_farmers_statistics.csv');
+  
+  let filename = 'gambia_poultry_farmers_statistics.csv';
+  if (farmerType === 'egg') {
+    filename = 'gambia_egg_farmers_statistics.csv';
+  } else if (farmerType === 'meat') {
+    filename = 'gambia_meat_farmers_statistics.csv';
+  }
+  
+  link.setAttribute('download', filename);
   link.style.visibility = 'hidden';
   document.body.appendChild(link);
   link.click();
@@ -661,15 +1088,16 @@ function exportToCSV() {
 }
 
 // Export to CSV for a specific region
-function exportRegionToCSV(regionName) {
-  const stats = calculateStatistics();
+function exportRegionToCSV(regionName, farmerType = 'all') {
+  const stats = calculateStatistics(farmerType);
   const regionData = fullData.find(r => r.region === regionName);
   
   if (!regionData) return;
   
   const regionStat = stats.regionStats[regionName];
+  const typeLabel = farmerType === 'egg' ? 'Egg' : farmerType === 'meat' ? 'Meat' : 'All';
   
-  let csvContent = `Gambia Poultry Farmers Association - ${regionName} Region Report\n\n`;
+  let csvContent = `Gambia Poultry Farmers Association - ${regionName} Region ${typeLabel} Farmers Report\n\n`;
   
   // Region Statistics
   csvContent += "REGION STATISTICS\n";
@@ -677,38 +1105,80 @@ function exportRegionToCSV(regionName) {
   csvContent += "Total Districts," + regionStat.districts + "\n";
   csvContent += "Total Wards," + regionStat.wards + "\n";
   csvContent += "Total Farmers," + regionStat.farmers + "\n";
-  csvContent += "Monthly Production," + regionStat.production + " eggs\n";
-  csvContent += "Annual Production," + (regionStat.production * 12) + " eggs\n\n";
+  
+  if (farmerType === 'egg') {
+    csvContent += "Monthly Production," + regionStat.production + " eggs\n";
+    csvContent += "Annual Production," + (regionStat.production * 12) + " eggs\n\n";
+  } else if (farmerType === 'meat') {
+    csvContent += "Monthly Production," + regionStat.production + " birds\n";
+    csvContent += "Annual Production," + (regionStat.production * 12) + " birds\n\n";
+  } else {
+    csvContent += "Monthly Production," + regionStat.production + " units\n";
+    csvContent += "Annual Production," + (regionStat.production * 12) + " units\n\n";
+  }
   
   // District Breakdown
   csvContent += "DISTRICT BREAKDOWN\n";
-  csvContent += "District,Wards,Farmers,Monthly Production,Annual Production\n";
+  csvContent += "District,Wards,Farmers,Monthly Production\n";
   
   regionData.districts.forEach(district => {
     let districtFarmers = 0;
     let districtProduction = 0;
     
     district.wards.forEach(ward => {
-      ward.farmers.forEach(farmer => {
-        districtFarmers++;
-        districtProduction += farmer.capacity;
-      });
+      // Egg farmers
+      if (farmerType === 'all' || farmerType === 'egg') {
+        ward.eggFarmers.forEach(farmer => {
+          districtFarmers++;
+          districtProduction += farmer.capacity;
+        });
+      }
+      
+      // Meat farmers
+      if (farmerType === 'all' || farmerType === 'meat') {
+        ward.meatFarmers.forEach(farmer => {
+          districtFarmers++;
+          districtProduction += farmer.capacity;
+        });
+      }
     });
     
-    csvContent += `"${district.district}",${district.wards.length},${districtFarmers},${districtProduction} eggs,${districtProduction * 12} eggs\n`;
+    if (farmerType === 'egg') {
+      csvContent += `"${district.district}",${district.wards.length},${districtFarmers},${districtProduction} eggs\n`;
+    } else if (farmerType === 'meat') {
+      csvContent += `"${district.district}",${district.wards.length},${districtFarmers},${districtProduction} birds\n`;
+    } else {
+      csvContent += `"${district.district}",${district.wards.length},${districtFarmers},${districtProduction} units\n`;
+    }
   });
   
-  csvContent += `"REGION TOTAL",${regionStat.wards},${regionStat.farmers},${regionStat.production} eggs,${regionStat.production * 12} eggs\n\n`;
+  if (farmerType === 'egg') {
+    csvContent += `"REGION TOTAL",${regionStat.wards},${regionStat.farmers},${regionStat.production} eggs\n\n`;
+  } else if (farmerType === 'meat') {
+    csvContent += `"REGION TOTAL",${regionStat.wards},${regionStat.farmers},${regionStat.production} birds\n\n`;
+  } else {
+    csvContent += `"REGION TOTAL",${regionStat.wards},${regionStat.farmers},${regionStat.production} units\n\n`;
+  }
   
   // Farmer Details
   csvContent += "FARMER DETAILS\n";
-  csvContent += "District,Ward,Name,Gender,Village,Capacity (eggs/month),Contact,Website\n";
+  csvContent += "District,Ward,Name,Gender,Village,Type,Capacity,Contact,Website\n";
   
   regionData.districts.forEach(district => {
     district.wards.forEach(ward => {
-      ward.farmers.forEach(farmer => {
-        csvContent += `"${district.district}","${ward.ward}","${farmer.name}","${farmer.gender}","${farmer.village}",${farmer.capacity},"${farmer.contact || 'Not provided'}","${farmer.website}"\n`;
-      });
+      // Egg farmers
+      if (farmerType === 'all' || farmerType === 'egg') {
+        ward.eggFarmers.forEach(farmer => {
+          csvContent += `"${district.district}","${ward.ward}","${farmer.name}","${farmer.gender}","${farmer.village}","Egg",${farmer.capacity} eggs/month,"${farmer.contact || 'Not provided'}","${farmer.website}"\n`;
+        });
+      }
+      
+      // Meat farmers
+      if (farmerType === 'all' || farmerType === 'meat') {
+        ward.meatFarmers.forEach(farmer => {
+          csvContent += `"${district.district}","${ward.ward}","${farmer.name}","${farmer.gender}","${farmer.village}","Meat",${farmer.capacity} birds/cycle,"${farmer.contact || 'Not provided'}","${farmer.website}"\n`;
+        });
+      }
     });
   });
   
@@ -717,7 +1187,15 @@ function exportRegionToCSV(regionName) {
   const link = document.createElement('a');
   const url = URL.createObjectURL(blob);
   link.setAttribute('href', url);
-  link.setAttribute('download', `${regionName.toLowerCase().replace(/\s+/g, '_')}_poultry_farmers.csv`);
+  
+  let filename = `${regionName.toLowerCase().replace(/\s+/g, '_')}_poultry_farmers.csv`;
+  if (farmerType === 'egg') {
+    filename = `${regionName.toLowerCase().replace(/\s+/g, '_')}_egg_farmers.csv`;
+  } else if (farmerType === 'meat') {
+    filename = `${regionName.toLowerCase().replace(/\s+/g, '_')}_meat_farmers.csv`;
+  }
+  
+  link.setAttribute('download', filename);
   link.style.visibility = 'hidden';
   document.body.appendChild(link);
   link.click();
@@ -725,13 +1203,14 @@ function exportRegionToCSV(regionName) {
 }
 
 // Print function for a specific region
-function printRegion(regionName) {
-  const stats = calculateStatistics();
+function printRegion(regionName, farmerType = 'all') {
+  const stats = calculateStatistics(farmerType);
   const regionData = fullData.find(r => r.region === regionName);
   
   if (!regionData) return;
   
   const regionStat = stats.regionStats[regionName];
+  const typeLabel = farmerType === 'egg' ? 'Egg' : farmerType === 'meat' ? 'Meat' : 'All';
   
   let printContent = `
     <html>
@@ -748,11 +1227,14 @@ function printRegion(regionName) {
       .stat-card { border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
       .stat-value { font-size: 24px; font-weight: bold; color: #d4af37; }
       .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #777; }
+      .farmer-type { background: #f9f9f9; padding: 5px 10px; border-radius: 4px; font-weight: bold; }
+      .egg-type { background: #fff8e1; color: #d4af37; }
+      .meat-type { background: #ffebee; color: #f44336; }
     </style>
     </head>
     <body>
       <h1>Gambia Poultry Farmers Association</h1>
-      <h2>${regionName} Region Report</h2>
+      <h2>${regionName} Region ${typeLabel} Farmers Report</h2>
       
       <div class="stat-grid">
         <div class="stat-card">
@@ -769,7 +1251,7 @@ function printRegion(regionName) {
         </div>
         <div class="stat-card">
           <div>Monthly Production</div>
-          <div class="stat-value">${regionStat.production.toLocaleString()} eggs</div>
+          <div class="stat-value">${regionStat.production.toLocaleString()} ${farmerType === 'egg' ? 'eggs' : farmerType === 'meat' ? 'birds' : 'units'}</div>
         </div>
       </div>
       
@@ -792,10 +1274,21 @@ function printRegion(regionName) {
     let districtProduction = 0;
     
     district.wards.forEach(ward => {
-      ward.farmers.forEach(farmer => {
-        districtFarmers++;
-        districtProduction += farmer.capacity;
-      });
+      // Egg farmers
+      if (farmerType === 'all' || farmerType === 'egg') {
+        ward.eggFarmers.forEach(farmer => {
+          districtFarmers++;
+          districtProduction += farmer.capacity;
+        });
+      }
+      
+      // Meat farmers
+      if (farmerType === 'all' || farmerType === 'meat') {
+        ward.meatFarmers.forEach(farmer => {
+          districtFarmers++;
+          districtProduction += farmer.capacity;
+        });
+      }
     });
     
     printContent += `
@@ -803,8 +1296,8 @@ function printRegion(regionName) {
         <td>${district.district}</td>
         <td>${district.wards.length}</td>
         <td>${districtFarmers}</td>
-        <td>${districtProduction.toLocaleString()} eggs</td>
-        <td>${(districtProduction * 12).toLocaleString()} eggs</td>
+        <td>${districtProduction.toLocaleString()} ${farmerType === 'egg' ? 'eggs' : farmerType === 'meat' ? 'birds' : 'units'}</td>
+        <td>${(districtProduction * 12).toLocaleString()} ${farmerType === 'egg' ? 'eggs' : farmerType === 'meat' ? 'birds' : 'units'}</td>
       </tr>
     `;
   });
@@ -816,8 +1309,8 @@ function printRegion(regionName) {
             <td>REGION TOTAL</td>
             <td>${regionStat.wards}</td>
             <td>${regionStat.farmers}</td>
-            <td>${regionStat.production.toLocaleString()} eggs</td>
-            <td>${(regionStat.production * 12).toLocaleString()} eggs</td>
+            <td>${regionStat.production.toLocaleString()} ${farmerType === 'egg' ? 'eggs' : farmerType === 'meat' ? 'birds' : 'units'}</td>
+            <td>${(regionStat.production * 12).toLocaleString()} ${farmerType === 'egg' ? 'eggs' : farmerType === 'meat' ? 'birds' : 'units'}</td>
           </tr>
         </tfoot>
       </table>
@@ -831,7 +1324,8 @@ function printRegion(regionName) {
             <th>Name</th>
             <th>Gender</th>
             <th>Village</th>
-            <th>Capacity (eggs/month)</th>
+            <th>Type</th>
+            <th>Capacity</th>
             <th>Contact</th>
           </tr>
         </thead>
@@ -840,19 +1334,41 @@ function printRegion(regionName) {
   
   regionData.districts.forEach(district => {
     district.wards.forEach(ward => {
-      ward.farmers.forEach(farmer => {
-        printContent += `
-          <tr>
-            <td>${district.district}</td>
-            <td>${ward.ward}</td>
-            <td>${farmer.name}</td>
-            <td>${farmer.gender}</td>
-            <td>${farmer.village}</td>
-            <td>${farmer.capacity}</td>
-            <td>${farmer.contact || 'Not provided'}</td>
-          </tr>
-        `;
-      });
+      // Egg farmers
+      if (farmerType === 'all' || farmerType === 'egg') {
+        ward.eggFarmers.forEach(farmer => {
+          printContent += `
+            <tr>
+              <td>${district.district}</td>
+              <td>${ward.ward}</td>
+              <td>${farmer.name}</td>
+              <td>${farmer.gender}</td>
+              <td>${farmer.village}</td>
+              <td><span class="farmer-type egg-type">Egg Producer</span></td>
+              <td>${farmer.capacity} eggs/month</td>
+              <td>${farmer.contact || 'Not provided'}</td>
+            </tr>
+          `;
+        });
+      }
+      
+      // Meat farmers
+      if (farmerType === 'all' || farmerType === 'meat') {
+        ward.meatFarmers.forEach(farmer => {
+          printContent += `
+            <tr>
+              <td>${district.district}</td>
+              <td>${ward.ward}</td>
+              <td>${farmer.name}</td>
+              <td>${farmer.gender}</td>
+              <td>${farmer.village}</td>
+              <td><span class="farmer-type meat-type">Meat Producer</span></td>
+              <td>${farmer.capacity} birds/cycle</td>
+              <td>${farmer.contact || 'Not provided'}</td>
+            </tr>
+          `;
+        });
+      }
     });
   });
   
@@ -881,6 +1397,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const regionFilter = document.getElementById('regionFilter');
   const districtFilter = document.getElementById('districtFilter');
   const wardFilter = document.getElementById('wardFilter');
+  const farmerTypeFilter = document.getElementById('farmerTypeFilter');
   const searchInput = document.getElementById('searchInput');
   const clearBtn = document.getElementById('clearBtn');
   const tabRegions = document.getElementById('tabRegions');
@@ -891,6 +1408,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let currentRegion = '';
   let currentDistrict = '';
   let currentWard = '';
+  let currentFarmerType = 'all';
   
   // Populate region list and filters
   function initializeRegions() {
@@ -986,7 +1504,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Show filtered content based on current selections
   function showFilteredContent() {
-    const stats = calculateStatistics();
+    const stats = calculateStatistics(currentFarmerType);
+    const separateStats = calculateSeparateStatistics();
     
     // Determine what to show based on current selections
     let title = "National Overview";
@@ -1044,12 +1563,19 @@ document.addEventListener('DOMContentLoaded', function() {
         <h3>${title}</h3>
         <div class="export-actions">
           ${currentRegion ? `
-            <button class="btn-secondary" onclick="exportRegionToCSV('${currentRegion}')">📥 Export ${currentRegion} CSV</button>
-            <button class="btn-secondary" onclick="printRegion('${currentRegion}')">🖨️ Print ${currentRegion}</button>
+            <button class="btn-secondary" onclick="exportRegionToCSV('${currentRegion}', '${currentFarmerType}')">📥 Export ${currentRegion} CSV</button>
+            <button class="btn-secondary" onclick="printRegion('${currentRegion}', '${currentFarmerType}')">🖨️ Print ${currentRegion}</button>
           ` : ''}
-          <button class="btn" onclick="exportToCSV()">📊 Download All Data CSV</button>
+          <button class="btn" onclick="exportToCSV('${currentFarmerType}')">📊 Download ${currentFarmerType === 'all' ? 'All' : currentFarmerType === 'egg' ? 'Egg' : 'Meat'} Data CSV</button>
         </div>
       </div>
+      
+      <div class="farmer-type-toggle">
+        <button class="type-toggle-btn ${currentFarmerType === 'all' ? 'active' : ''}" data-type="all">All Farmers</button>
+        <button class="type-toggle-btn ${currentFarmerType === 'egg' ? 'active' : ''}" data-type="egg">Egg Producers</button>
+        <button class="type-toggle-btn ${currentFarmerType === 'meat' ? 'active' : ''}" data-type="meat">Meat Producers</button>
+      </div>
+      
       <div class="dashboard">
         <div class="dash-card">
           <h3 style="margin-top:0;color:var(--gold)">${title}</h3>
@@ -1068,7 +1594,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="stat">
               <div class="small-muted">Monthly Production</div>
-              <h3>${currentRegion ? (regionStat ? regionStat.production.toLocaleString() : '0') : stats.totalProduction.toLocaleString()} eggs</h3>
+              <h3>${currentRegion ? (regionStat ? regionStat.production.toLocaleString() : '0') : stats.totalProduction.toLocaleString()} ${currentFarmerType === 'egg' ? 'eggs' : currentFarmerType === 'meat' ? 'birds' : 'units'}</h3>
             </div>
           </div>
         </div>
@@ -1080,21 +1606,37 @@ document.addEventListener('DOMContentLoaded', function() {
               <span>${fullData.length}</span>
             </div>
             <div class="region-line">
+              <span>Egg Farmers:</span>
+              <span>${separateStats.egg.totalFarmers}</span>
+            </div>
+            <div class="region-line">
+              <span>Meat Farmers:</span>
+              <span>${separateStats.meat.totalFarmers}</span>
+            </div>
+            <div class="region-line">
               <span>Total Farmers:</span>
               <span>${stats.totalFarmers}</span>
             </div>
             <div class="region-line">
-              <span>Monthly Production:</span>
-              <span>${stats.totalProduction.toLocaleString()} eggs</span>
+              <span>Egg Production:</span>
+              <span>${separateStats.egg.totalProduction.toLocaleString()} eggs/month</span>
             </div>
             <div class="region-line">
-              <span>Annual Production:</span>
-              <span>${(stats.totalProduction * 12).toLocaleString()} eggs</span>
+              <span>Meat Production:</span>
+              <span>${separateStats.meat.totalProduction.toLocaleString()} birds/month</span>
             </div>
           </div>
         </div>
       </div>
     `;
+    
+    // Add event listeners to type toggle buttons
+    document.querySelectorAll('.type-toggle-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        currentFarmerType = this.getAttribute('data-type');
+        showFilteredContent();
+      });
+    });
     
     // Render the filtered data
     filteredData.forEach(region => {
@@ -1114,23 +1656,47 @@ document.addEventListener('DOMContentLoaded', function() {
           const farmersList = document.createElement('div');
           farmersList.className = 'section-row';
           
-          ward.farmers.forEach(farmer => {
-            const farmerEl = document.createElement('div');
-            farmerEl.className = 'farmer';
-            farmerEl.innerHTML = `
-              <div class="avatar-wrap">
-                <div class="initials">${farmer.name.split(' ').map(n => n[0]).join('')}</div>
-              </div>
-              <div class="tinfo">
-                <b>${farmer.name}</b>
-                <div class="tmeta">Gender: ${farmer.gender} | Village: ${farmer.village}</div>
-                <div class="tmeta">Capacity: ${farmer.capacity} eggs per month</div>
-                <div class="tmeta">Contact: ${farmer.contact || 'Not provided'}</div>
-                <div class="tmeta"><a href="${farmer.website}" target="_blank" style="color:var(--gold)">View Profile</a></div>
-              </div>
-            `;
-            farmersList.appendChild(farmerEl);
-          });
+          // Show egg farmers if selected
+          if (currentFarmerType === 'all' || currentFarmerType === 'egg') {
+            ward.eggFarmers.forEach(farmer => {
+              const farmerEl = document.createElement('div');
+              farmerEl.className = 'farmer';
+              farmerEl.innerHTML = `
+                <div class="avatar-wrap">
+                  <div class="initials">${farmer.name.split(' ').map(n => n[0]).join('')}</div>
+                </div>
+                <div class="tinfo">
+                  <b>${farmer.name} <span class="farmer-type-badge egg-badge">Egg Producer</span></b>
+                  <div class="tmeta">Gender: ${farmer.gender} | Village: ${farmer.village}</div>
+                  <div class="tmeta">Capacity: ${farmer.capacity} eggs per month</div>
+                  <div class="tmeta">Contact: ${farmer.contact || 'Not provided'}</div>
+                  <div class="tmeta"><a href="${farmer.website}" target="_blank" style="color:var(--gold)">View Profile</a></div>
+                </div>
+              `;
+              farmersList.appendChild(farmerEl);
+            });
+          }
+          
+          // Show meat farmers if selected
+          if (currentFarmerType === 'all' || currentFarmerType === 'meat') {
+            ward.meatFarmers.forEach(farmer => {
+              const farmerEl = document.createElement('div');
+              farmerEl.className = 'farmer';
+              farmerEl.innerHTML = `
+                <div class="avatar-wrap">
+                  <div class="initials">${farmer.name.split(' ').map(n => n[0]).join('')}</div>
+                </div>
+                <div class="tinfo">
+                  <b>${farmer.name} <span class="farmer-type-badge meat-badge">Meat Producer</span></b>
+                  <div class="tmeta">Gender: ${farmer.gender} | Village: ${farmer.village}</div>
+                  <div class="tmeta">Capacity: ${farmer.capacity} birds per cycle</div>
+                  <div class="tmeta">Contact: ${farmer.contact || 'Not provided'}</div>
+                  <div class="tmeta"><a href="${farmer.website}" target="_blank" style="color:var(--gold)">View Profile</a></div>
+                </div>
+              `;
+              farmersList.appendChild(farmerEl);
+            });
+          }
           
           wardEl.appendChild(farmersList);
           wardsGrid.appendChild(wardEl);
@@ -1163,6 +1729,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Show statistics view
   function showStatistics() {
     const stats = calculateStatistics();
+    const separateStats = calculateSeparateStatistics();
     
     contentArea.innerHTML = `
       <div class="dashboard">
@@ -1189,26 +1756,27 @@ document.addEventListener('DOMContentLoaded', function() {
           
           <div class="stat-row" style="margin-top:1rem">
             <div class="stat">
+              <div class="small-muted">Egg Farmers</div>
+              <h3>${separateStats.egg.totalFarmers}</h3>
+            </div>
+            <div class="stat">
+              <div class="small-muted">Meat Farmers</div>
+              <h3>${separateStats.meat.totalFarmers}</h3>
+            </div>
+            <div class="stat">
               <div class="small-muted">Monthly Egg Production</div>
-              <h3>${stats.totalProduction.toLocaleString()}</h3>
+              <h3>${separateStats.egg.totalProduction.toLocaleString()}</h3>
             </div>
             <div class="stat">
-              <div class="small-muted">Annual Egg Production</div>
-              <h3>${(stats.totalProduction * 12).toLocaleString()}</h3>
-            </div>
-            <div class="stat">
-              <div class="small-muted">Average per Farmer</div>
-              <h3>500</h3>
-            </div>
-            <div class="stat">
-              <div class="small-muted">Total Capacity</div>
-              <h3>${stats.totalProduction.toLocaleString()}/month</h3>
+              <div class="small-muted">Monthly Meat Production</div>
+              <h3>${separateStats.meat.totalProduction.toLocaleString()}</h3>
             </div>
           </div>
           
           <div class="export-buttons">
-            <button class="btn" onclick="exportToCSV()">📊 Download National CSV Report</button>
-            <button class="btn-secondary" onclick="window.print()">🖨️ Print Statistics</button>
+            <button class="btn" onclick="exportToCSV('all')">📊 Download All Farmers CSV</button>
+            <button class="btn-secondary" onclick="exportToCSV('egg')">🥚 Download Egg Farmers CSV</button>
+            <button class="btn-secondary" onclick="exportToCSV('meat')">🍗 Download Meat Farmers CSV</button>
           </div>
         </div>
         
@@ -1220,31 +1788,40 @@ document.addEventListener('DOMContentLoaded', function() {
                 <th>Region</th>
                 <th>Districts</th>
                 <th>Wards</th>
-                <th>Farmers</th>
-                <th>Monthly Production</th>
+                <th>Egg Farmers</th>
+                <th>Meat Farmers</th>
+                <th>Total Farmers</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              ${Object.entries(stats.regionStats).map(([region, data]) => `
-                <tr>
-                  <td>${region}</td>
-                  <td>${data.districts}</td>
-                  <td>${data.wards}</td>
-                  <td>${data.farmers}</td>
-                  <td>${data.production.toLocaleString()} eggs</td>
-                  <td>
-                    <button class="btn-secondary" onclick="exportRegionToCSV('${region}')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">CSV</button>
-                    <button class="btn-secondary" onclick="printRegion('${region}')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-left: 0.25rem;">Print</button>
-                  </td>
-                </tr>
-              `).join('')}
+              ${Object.entries(stats.regionStats).map(([region, data]) => {
+                const eggStats = calculateSeparateStatistics().egg.regionStats[region] || { farmers: 0 };
+                const meatStats = calculateSeparateStatistics().meat.regionStats[region] || { farmers: 0 };
+                
+                return `
+                  <tr>
+                    <td>${region}</td>
+                    <td>${data.districts}</td>
+                    <td>${data.wards}</td>
+                    <td>${eggStats.farmers}</td>
+                    <td>${meatStats.farmers}</td>
+                    <td>${data.farmers}</td>
+                    <td>
+                      <button class="btn-secondary" onclick="exportRegionToCSV('${region}', 'all')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">All CSV</button>
+                      <button class="btn-secondary" onclick="exportRegionToCSV('${region}', 'egg')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-left: 0.25rem;">Egg CSV</button>
+                      <button class="btn-secondary" onclick="exportRegionToCSV('${region}', 'meat')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-left: 0.25rem;">Meat CSV</button>
+                    </td>
+                  </tr>
+                `;
+              }).join('')}
               <tr style="background:rgba(212,175,55,0.1)">
                 <td><strong>NATIONAL TOTAL</strong></td>
                 <td><strong>${stats.totalDistricts}</strong></td>
                 <td><strong>${stats.totalWards}</strong></td>
+                <td><strong>${separateStats.egg.totalFarmers}</strong></td>
+                <td><strong>${separateStats.meat.totalFarmers}</strong></td>
                 <td><strong>${stats.totalFarmers}</strong></td>
-                <td><strong>${stats.totalProduction.toLocaleString()} eggs</strong></td>
                 <td></td>
               </tr>
             </tbody>
@@ -1280,11 +1857,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const regionValue = regionFilter.value;
     const districtValue = districtFilter.value;
     const wardValue = wardFilter.value;
+    const farmerTypeValue = farmerTypeFilter.value;
     
     // Update current selections
     currentRegion = regionValue || '';
     currentDistrict = districtValue || '';
     currentWard = wardValue || '';
+    currentFarmerType = farmerTypeValue || 'all';
     
     // Reset all regions active state
     Array.from(regionList.children).forEach(item => item.classList.remove('active'));
@@ -1298,7 +1877,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
     
-    if (regionValue || districtValue || wardValue) {
+    if (regionValue || districtValue || wardValue || farmerTypeValue !== 'all') {
       showFilteredContent();
     } else {
       // No filters - show first region
@@ -1322,13 +1901,16 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   wardFilter.addEventListener('change', applyFilters);
+  farmerTypeFilter.addEventListener('change', applyFilters);
   searchInput.addEventListener('input', applyFilters);
   
   clearBtn.addEventListener('click', () => {
     regionFilter.value = '';
     districtFilter.value = '';
     wardFilter.value = '';
+    farmerTypeFilter.value = 'all';
     searchInput.value = '';
+    currentFarmerType = 'all';
     updateDistrictFilter('');
     applyFilters();
   });
